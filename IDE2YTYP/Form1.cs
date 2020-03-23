@@ -11,16 +11,16 @@ namespace IDE2YTYP
     public partial class IDE2YTYP : Form
     {
         
-        public static string folderide;
-        public static string folderydr;
-        public static string folderout;
+        private static string folderide;
+        private static string folderydr;
+        private static string folderout;
 
-        public static StringBuilder missing = new StringBuilder();
+        private static StringBuilder missing = new StringBuilder();
 
 
-        public static bool ideempty;
-        public static bool ydrempty;
-        public static bool outempty;
+        private static bool ideempty;
+        private static bool ydrempty;
+        private static bool outempty;
 
         private static string modelName;
         private static string textureDic;
@@ -45,7 +45,7 @@ namespace IDE2YTYP
             FolderBrowserDialog fbd = new FolderBrowserDialog();
             fbd.Description = "Select a folder that contains your IDEs files.";
             fbd.ShowDialog();
-            ide_textbox.Text = fbd.SelectedPath;
+            //ide_textbox.Text = fbd.SelectedPath;
         }
 
         private void browse_ydr_Click(object sender, EventArgs e)
@@ -54,7 +54,8 @@ namespace IDE2YTYP
             fbd2.Description = "Select a folder that contains your YDRs files.";
 
             fbd2.ShowDialog();
-            ydr_textbox.Text = fbd2.SelectedPath;
+            
+            //ydr_textbox.Text = fbd2.SelectedPath;
         }
 
         private void browse_out_Click(object sender, EventArgs e)
@@ -97,9 +98,15 @@ namespace IDE2YTYP
 
                     if (!issom)
                     {
-                        if (string.IsNullOrEmpty(fixline)) continue;
-                        if (fixline.StartsWith("#")) continue; //ignore comments
-                        if (fixline.StartsWith("objs")) { obj = true; continue; };
+                        if (string.IsNullOrEmpty(fixline))
+                        {
+                            continue;
+                        }
+                        if (fixline.StartsWith("#"))
+                        {
+                            continue; //ignore comments
+                        }
+                        if (fixline.StartsWith("objs")){ obj = true; continue; };
                         if (fixline.StartsWith("tobj")) { tobj = true; continue; };
                     }
 
