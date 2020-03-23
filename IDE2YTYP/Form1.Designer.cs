@@ -121,7 +121,7 @@
             this.browse_ydr.TabIndex = 3;
             this.browse_ydr.Text = "Browse";
             this.browse_ydr.UseVisualStyleBackColor = true;
-            this.browse_ydr.Click += new System.EventHandler(browse_ydr_Click);
+            this.browse_ydr.Click += new System.EventHandler(this.browse_ydr_Click);
             // 
             // browse_out
             // 
@@ -131,7 +131,7 @@
             this.browse_out.TabIndex = 4;
             this.browse_out.Text = "Browse";
             this.browse_out.UseVisualStyleBackColor = true;
-            this.browse_out.Click += new System.EventHandler(browse_out_Click);
+            this.browse_out.Click += new System.EventHandler(this.browse_out_Click);
             // 
             // convert_button
             // 
