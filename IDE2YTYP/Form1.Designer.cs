@@ -228,7 +228,6 @@
             this.d.Size = new System.Drawing.Size(760, 192);
             this.d.TabIndex = 11;
             this.d.TabStop = false;
-            this.d.Enter += new System.EventHandler(this.groupBox1_Enter);
             // 
             // IDE2YTYP
             // 
@@ -242,7 +241,6 @@
             this.Name = "IDE2YTYP";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "IDE2YTYP";
-            this.Load += new System.EventHandler(this.IDE2YTYP_Load);
             this.d.ResumeLayout(false);
             this.d.PerformLayout();
             this.ResumeLayout(false);

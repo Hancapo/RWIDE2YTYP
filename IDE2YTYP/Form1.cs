@@ -237,7 +237,7 @@ namespace IDE2YTYP
 
         }
 
-        private (bool, bool, bool) Check(string idepath, string ydrpath, string outpath)
+        private static (bool, bool, bool) Check(string idepath, string ydrpath, string outpath)
         {
             bool thereiside = false;
             bool thereisydr = false;
@@ -279,15 +279,6 @@ namespace IDE2YTYP
             return (thereiside, thereisydr, thereisout);
         }
 
-        private void IDE2YTYP_Load(object sender, EventArgs e)
-        {
-            
 
-        }
-
-        private void groupBox1_Enter(object sender, EventArgs e)
-        {
-
-        }
     }
 }
