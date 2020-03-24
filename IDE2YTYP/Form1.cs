@@ -1,16 +1,16 @@
-﻿using System;
+﻿using CodeWalker.GameFiles;
+using SharpDX;
+using System;
+using System.IO;
 using System.Text;
 using System.Windows.Forms;
-using System.IO;
-using CodeWalker.GameFiles;
-using SharpDX;
 
 
 namespace IDE2YTYP
 {
     public partial class IDE2YTYP : Form
     {
-        
+
         private static string folderide;
         private static string folderydr;
         private static string folderout;
@@ -54,7 +54,7 @@ namespace IDE2YTYP
             fbd2.Description = "Select a folder that contains your YDRs files.";
 
             fbd2.ShowDialog();
-            
+
             //ydr_textbox.Text = fbd2.SelectedPath;
         }
 
@@ -72,7 +72,7 @@ namespace IDE2YTYP
         {
             bool tobj = false;
             bool obj = false;
-             
+
             bool issom = (tobj || obj);
 
             string[] idefiles = Directory.GetFiles(idefolda, "*.ide");
@@ -106,7 +106,7 @@ namespace IDE2YTYP
                         {
                             continue; //ignore comments
                         }
-                        if (fixline.StartsWith("objs")){ obj = true; continue; };
+                        if (fixline.StartsWith("objs")) { obj = true; continue; };
                         if (fixline.StartsWith("tobj")) { tobj = true; continue; };
                     }
 
@@ -170,11 +170,11 @@ namespace IDE2YTYP
                 byte[] newData = ytf.Save();
                 File.WriteAllBytes(folderout + "//" + filename + ".ytyp", newData);
             }
-                      
+
         }
 
         private void convert_button_Click(object sender, EventArgs e)
-        {	
+        {
 
             if (Check(folderide, folderydr, folderout).Item1 && Check(folderide, folderydr, folderout).Item2 && Check(folderide, folderydr, folderout).Item3)
             {
