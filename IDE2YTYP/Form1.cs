@@ -217,14 +217,55 @@ namespace IDE2YTYP
 
                     if (isLOD)
                     {
+                        string LODytfFolder = folderout + "//" + filename + "_lod.ytyp";
                         byte[] newLodData = lodytf.Save();
-                        File.WriteAllBytes(folderout + "//" + filename + "_lod.ytyp", newLodData);
+
+                        if (File.Exists(LODytfFolder))
+                        {
+                            DialogResult result = MessageBox.Show("The file " + filename + "_lod.ytyp" + " already exists. \nDo you want to overwrite it?", "Alert", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                            if (result == DialogResult.Yes)
+                            {
+
+                                File.WriteAllBytes(LODytfFolder, newLodData);
+
+                            }
+
+
+                        }
+                        else
+                        {
+                            File.WriteAllBytes(LODytfFolder, newLodData);
+
+                        }
+
+
+
                     }
 
 
 
+                    string ytfFolder = folderout + "//" + filename + ".ytyp";
                     byte[] newData = ytf.Save();
-                    File.WriteAllBytes(folderout + "//" + filename + ".ytyp", newData);
+
+                    if (File.Exists(ytfFolder))
+                    {
+                        DialogResult result = MessageBox.Show("The file " + filename + " already exists. \nDo you want to overwrite it?", "Alert", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                        if (result == DialogResult.Yes)
+                        {
+
+                            File.WriteAllBytes(ytfFolder, newData);
+
+                        }
+
+
+                    }
+                    else
+                    {
+                        File.WriteAllBytes(ytfFolder, newData);
+
+                    }
+
+
                 }
 
             });
@@ -240,7 +281,7 @@ namespace IDE2YTYP
             {
                 
 
-                await OpenIDEs(folderide, this.cbLOD.Checked);
+                await OpenIDEs(folderide, this.cbLOD.Checked).ConfigureAwait(false);
 
                 MessageBox.Show("Done", "Complete!", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 EnableControls();
