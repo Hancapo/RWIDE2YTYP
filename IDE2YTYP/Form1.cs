@@ -11,23 +11,23 @@ namespace IDE2YTYP
     public partial class IDE2YTYP : Form
     {
 
-        private static string folderide;
-        private static string folderydr;
-        private static string folderout;
+        private string folderide;
+        private string folderydr;
+        private string folderout;
 
         private static StringBuilder missing = new StringBuilder();
 
 
-        private static string modelName;
-        private static string textureDic;
+        private string modelName;
+        private string textureDic;
 
-        private static string modelNamet;
-        private static string textureDict;
+        private string modelNamet;
+        private string textureDict;
 
-        public static string ModelName { get => modelName; set => modelName = value; }
-        public static string TextureDic { get => textureDic; set => textureDic = value; }
-        public static string ModelNamet { get => modelNamet; set => modelNamet = value; }
-        public static string TextureDict { get => textureDict; set => textureDict = value; }
+        public string ModelName { get => modelName; set => modelName = value; }
+        public string TextureDic { get => textureDic; set => textureDic = value; }
+        public string ModelNamet { get => modelNamet; set => modelNamet = value; }
+        public string TextureDict { get => textureDict; set => textureDict = value; }
 
         public IDE2YTYP()
         {
@@ -115,43 +115,43 @@ namespace IDE2YTYP
                     if (obj)
                     {
 
-                        modelName = linesplitted[1].Trim(); //ModelName in IDE
-                        textureDic = linesplitted[2].Trim(); //TextureDictionary in IDE 
+                        ModelName = linesplitted[1].Trim(); //ModelName in IDE
+                        TextureDic = linesplitted[2].Trim(); //TextureDictionary in IDE 
 
                         
 
                         if (isLOD)
                         {
-                            if (modelName.Contains("lod"))
+                            if (ModelName.Contains("lod"))
                             {
                                 Archetype lodarc = new Archetype();
-                                lodarc._BaseArchetypeDef.assetName = JenkHash.GenHash(modelName);
+                                lodarc._BaseArchetypeDef.assetName = JenkHash.GenHash(ModelName);
                                 lodarc._BaseArchetypeDef.textureDictionary = JenkHash.GenHash(TextureDic);
                                 lodarc._BaseArchetypeDef.flags = 12582912;
                                 lodarc._BaseArchetypeDef.lodDist = float.Parse(lodist_textbox.Text);
-                                lodarc._BaseArchetypeDef.name = JenkHash.GenHash(modelName);
+                                lodarc._BaseArchetypeDef.name = JenkHash.GenHash(ModelName);
                                 lodarc._BaseArchetypeDef.hdTextureDist = float.Parse(hdtexturedist_textbox.Text);
                                 lodarc._BaseArchetypeDef.assetType = rage__fwArchetypeDef__eAssetType.ASSET_TYPE_DRAWABLE;
-                                lodarc._BaseArchetypeDef.bbMin = GetYDR(modelName).bbmin;
-                                lodarc._BaseArchetypeDef.bbMax = GetYDR(modelName).bbmax;
-                                lodarc._BaseArchetypeDef.bsCentre = GetYDR(modelName).bbcenter;
-                                lodarc._BaseArchetypeDef.bsRadius = GetYDR(modelName).bbsphere;
+                                lodarc._BaseArchetypeDef.bbMin = GetYDR(ModelName).bbmin;
+                                lodarc._BaseArchetypeDef.bbMax = GetYDR(ModelName).bbmax;
+                                lodarc._BaseArchetypeDef.bsCentre = GetYDR(ModelName).bbcenter;
+                                lodarc._BaseArchetypeDef.bsRadius = GetYDR(ModelName).bbsphere;
                                 lodytf.AddArchetype(lodarc);
                             }
                             else
                             {
                                 Archetype arc = new Archetype();
-                                arc._BaseArchetypeDef.assetName = JenkHash.GenHash(modelName);
+                                arc._BaseArchetypeDef.assetName = JenkHash.GenHash(ModelName);
                                 arc._BaseArchetypeDef.textureDictionary = JenkHash.GenHash(TextureDic);
                                 arc._BaseArchetypeDef.flags = 12582912;
                                 arc._BaseArchetypeDef.lodDist = float.Parse(lodist_textbox.Text);
-                                arc._BaseArchetypeDef.name = JenkHash.GenHash(modelName);
+                                arc._BaseArchetypeDef.name = JenkHash.GenHash(ModelName);
                                 arc._BaseArchetypeDef.hdTextureDist = float.Parse(hdtexturedist_textbox.Text);
                                 arc._BaseArchetypeDef.assetType = rage__fwArchetypeDef__eAssetType.ASSET_TYPE_DRAWABLE;
-                                arc._BaseArchetypeDef.bbMin = GetYDR(modelName).bbmin;
-                                arc._BaseArchetypeDef.bbMax = GetYDR(modelName).bbmax;
-                                arc._BaseArchetypeDef.bsCentre = GetYDR(modelName).bbcenter;
-                                arc._BaseArchetypeDef.bsRadius = GetYDR(modelName).bbsphere;
+                                arc._BaseArchetypeDef.bbMin = GetYDR(ModelName).bbmin;
+                                arc._BaseArchetypeDef.bbMax = GetYDR(ModelName).bbmax;
+                                arc._BaseArchetypeDef.bsCentre = GetYDR(ModelName).bbcenter;
+                                arc._BaseArchetypeDef.bsRadius = GetYDR(ModelName).bbsphere;
                                 ytf.AddArchetype(arc);
                             }
 
@@ -159,17 +159,17 @@ namespace IDE2YTYP
                         else
                         {
                             Archetype arc = new Archetype();
-                            arc._BaseArchetypeDef.assetName = JenkHash.GenHash(modelName);
+                            arc._BaseArchetypeDef.assetName = JenkHash.GenHash(ModelName);
                             arc._BaseArchetypeDef.textureDictionary = JenkHash.GenHash(TextureDic);
                             arc._BaseArchetypeDef.flags = 12582912;
                             arc._BaseArchetypeDef.lodDist = float.Parse(lodist_textbox.Text);
-                            arc._BaseArchetypeDef.name = JenkHash.GenHash(modelName);
+                            arc._BaseArchetypeDef.name = JenkHash.GenHash(ModelName);
                             arc._BaseArchetypeDef.hdTextureDist = float.Parse(hdtexturedist_textbox.Text);
                             arc._BaseArchetypeDef.assetType = rage__fwArchetypeDef__eAssetType.ASSET_TYPE_DRAWABLE;
-                            arc._BaseArchetypeDef.bbMin = GetYDR(modelName).bbmin;
-                            arc._BaseArchetypeDef.bbMax = GetYDR(modelName).bbmax;
-                            arc._BaseArchetypeDef.bsCentre = GetYDR(modelName).bbcenter;
-                            arc._BaseArchetypeDef.bsRadius = GetYDR(modelName).bbsphere;
+                            arc._BaseArchetypeDef.bbMin = GetYDR(ModelName).bbmin;
+                            arc._BaseArchetypeDef.bbMax = GetYDR(ModelName).bbmax;
+                            arc._BaseArchetypeDef.bsCentre = GetYDR(ModelName).bbcenter;
+                            arc._BaseArchetypeDef.bsRadius = GetYDR(ModelName).bbsphere;
                             ytf.AddArchetype(arc);
 
                         }
@@ -180,22 +180,22 @@ namespace IDE2YTYP
                     if (tobj)
                     {
 
-                        modelNamet = linesplitted[1].Trim(); //ModelName in IDE
-                        textureDict = linesplitted[2].Trim(); //TextureDictionary in IDE 
+                        ModelNamet = linesplitted[1].Trim(); //ModelName in IDE
+                        TextureDict = linesplitted[2].Trim(); //TextureDictionary in IDE 
 
                         TimeArchetype tarc = new TimeArchetype();
 
-                        tarc._TimeArchetypeDef._BaseArchetypeDef.assetName = JenkHash.GenHash(modelNamet);
+                        tarc._TimeArchetypeDef._BaseArchetypeDef.assetName = JenkHash.GenHash(ModelNamet);
                         tarc._TimeArchetypeDef._BaseArchetypeDef.textureDictionary = JenkHash.GenHash(TextureDict);
                         tarc._TimeArchetypeDef._BaseArchetypeDef.flags = 12582912;
                         tarc._TimeArchetypeDef._BaseArchetypeDef.lodDist = float.Parse(lodist_textbox.Text);
-                        tarc._TimeArchetypeDef._BaseArchetypeDef.name = JenkHash.GenHash(modelNamet);
+                        tarc._TimeArchetypeDef._BaseArchetypeDef.name = JenkHash.GenHash(ModelNamet);
                         tarc._TimeArchetypeDef._BaseArchetypeDef.hdTextureDist = float.Parse(hdtexturedist_textbox.Text);
                         tarc._TimeArchetypeDef._BaseArchetypeDef.assetType = rage__fwArchetypeDef__eAssetType.ASSET_TYPE_DRAWABLE;
-                        tarc._TimeArchetypeDef._BaseArchetypeDef.bbMax = GetYDR(modelNamet).bbmax;
-                        tarc._TimeArchetypeDef._BaseArchetypeDef.bbMin = GetYDR(modelNamet).bbmin;
-                        tarc._TimeArchetypeDef._BaseArchetypeDef.bsCentre = GetYDR(modelNamet).bbcenter;
-                        tarc._TimeArchetypeDef._BaseArchetypeDef.bsRadius = GetYDR(modelNamet).bbsphere;
+                        tarc._TimeArchetypeDef._BaseArchetypeDef.bbMax = GetYDR(ModelNamet).bbmax;
+                        tarc._TimeArchetypeDef._BaseArchetypeDef.bbMin = GetYDR(ModelNamet).bbmin;
+                        tarc._TimeArchetypeDef._BaseArchetypeDef.bsCentre = GetYDR(ModelNamet).bbcenter;
+                        tarc._TimeArchetypeDef._BaseArchetypeDef.bsRadius = GetYDR(ModelNamet).bbsphere;
                         tarc._TimeArchetypeDef._TimeArchetypeDef.timeFlags = 33030175;
 
                         ytf.AddArchetype(tarc);

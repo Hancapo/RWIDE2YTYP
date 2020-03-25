@@ -3,6 +3,9 @@ using System.Text;
 
 namespace IDE2YTYP
 {
+    //Jenk.cs grabbed from github.com/dexyfex/OpenMapTools
+    //Props to dexyfex
+
     public class JenkHash
     {
         public JenkHashInputEncoding Encoding { get; set; }
