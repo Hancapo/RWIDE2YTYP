@@ -47,6 +47,8 @@
             this.porcentaje = new System.Windows.Forms.Label();
             this.d = new System.Windows.Forms.GroupBox();
             this.cbLOD = new System.Windows.Forms.CheckBox();
+            this.txtStatus = new System.Windows.Forms.Label();
+            this.hScrollBar1 = new System.Windows.Forms.HScrollBar();
             this.d.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -67,7 +69,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.ide_textbox.Location = new System.Drawing.Point(190, 33);
             this.ide_textbox.Name = "ide_textbox";
-            this.ide_textbox.Size = new System.Drawing.Size(341, 20);
+            this.ide_textbox.Size = new System.Drawing.Size(350, 20);
             this.ide_textbox.TabIndex = 1;
             this.ide_textbox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.ide_textbox.TextChanged += new System.EventHandler(this.ide_textbox_TextChanged);
@@ -210,6 +212,8 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.d.AutoSize = true;
+            this.d.Controls.Add(this.hScrollBar1);
+            this.d.Controls.Add(this.txtStatus);
             this.d.Controls.Add(this.cbLOD);
             this.d.Controls.Add(this.ide_textbox);
             this.d.Controls.Add(this.porcentaje);
@@ -230,7 +234,7 @@
             this.d.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.d.Location = new System.Drawing.Point(12, 12);
             this.d.Name = "d";
-            this.d.Size = new System.Drawing.Size(704, 276);
+            this.d.Size = new System.Drawing.Size(704, 374);
             this.d.TabIndex = 11;
             this.d.TabStop = false;
             // 
@@ -244,12 +248,28 @@
             this.cbLOD.Text = "Split to LOD type";
             this.cbLOD.UseVisualStyleBackColor = true;
             // 
+            // txtStatus
+            // 
+            this.txtStatus.AutoSize = true;
+            this.txtStatus.Location = new System.Drawing.Point(345, 204);
+            this.txtStatus.Name = "txtStatus";
+            this.txtStatus.Size = new System.Drawing.Size(24, 13);
+            this.txtStatus.TabIndex = 12;
+            this.txtStatus.Text = "Idle";
+            // 
+            // hScrollBar1
+            // 
+            this.hScrollBar1.Location = new System.Drawing.Point(505, 223);
+            this.hScrollBar1.Name = "hScrollBar1";
+            this.hScrollBar1.Size = new System.Drawing.Size(153, 17);
+            this.hScrollBar1.TabIndex = 13;
+            // 
             // IDE2YTYP
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.ClientSize = new System.Drawing.Size(723, 305);
+            this.ClientSize = new System.Drawing.Size(723, 403);
             this.Controls.Add(this.d);
             this.HelpButton = true;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -284,6 +304,8 @@
         private System.Windows.Forms.Label porcentaje;
         private System.Windows.Forms.GroupBox d;
         private System.Windows.Forms.CheckBox cbLOD;
+        private System.Windows.Forms.Label txtStatus;
+        private System.Windows.Forms.HScrollBar hScrollBar1;
     }
 }
 
