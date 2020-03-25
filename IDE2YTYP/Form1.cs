@@ -228,7 +228,7 @@ namespace IDE2YTYP
                 }
 
             });
-            await tk;
+            await tk.ConfigureAwait(false);
 
 
         }
