@@ -88,6 +88,8 @@ namespace IDE2YTYP
 
                     missing.AppendLine(filename + " missing models: ");
 
+                    int idecount;
+
                     string[] idelines = File.ReadAllLines(ide);
 
                     foreach (var line in idelines)
