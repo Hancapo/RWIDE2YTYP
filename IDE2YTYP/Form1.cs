@@ -353,7 +353,7 @@ namespace IDE2YTYP
             return (thereiside, thereisydr, thereisout);
         }
 
-        private static void EnableControls()
+        private void EnableControls()
         {
             ide_textbox.ReadOnly = false;
             ydr_textbox.ReadOnly = false;
@@ -367,7 +367,7 @@ namespace IDE2YTYP
             browse_ydr.Enabled = true;
         }
 
-        private static void DisableControls()
+        private void DisableControls()
         {
             ide_textbox.ReadOnly = true;
             ydr_textbox.ReadOnly = true;
