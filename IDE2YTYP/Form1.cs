@@ -4,7 +4,7 @@ using System;
 using System.IO;
 using System.Text;
 using System.Windows.Forms;
-
+using System.Collections.Generic;
 
 namespace IDE2YTYP
 {
@@ -17,10 +17,6 @@ namespace IDE2YTYP
 
         private static StringBuilder missing = new StringBuilder();
 
-
-        private static bool ideempty;
-        private static bool ydrempty;
-        private static bool outempty;
 
         private static string modelName;
         private static string textureDic;
@@ -37,6 +33,7 @@ namespace IDE2YTYP
         {
             InitializeComponent();
             missing.Clear();
+            
         }
 
 
@@ -45,17 +42,15 @@ namespace IDE2YTYP
             FolderBrowserDialog fbd = new FolderBrowserDialog();
             fbd.Description = "Select a folder that contains your IDEs files.";
             fbd.ShowDialog();
-            //ide_textbox.Text = fbd.SelectedPath;
+            this.ide_textbox.Text = fbd.SelectedPath;
         }
 
         private void browse_ydr_Click(object sender, EventArgs e)
         {
             FolderBrowserDialog fbd2 = new FolderBrowserDialog();
             fbd2.Description = "Select a folder that contains your YDRs files.";
-
             fbd2.ShowDialog();
-
-            //ydr_textbox.Text = fbd2.SelectedPath;
+            this.ydr_textbox.Text = fbd2.SelectedPath;
         }
 
         private void browse_out_Click(object sender, EventArgs e)
@@ -64,11 +59,10 @@ namespace IDE2YTYP
             FolderBrowserDialog fbd3 = new FolderBrowserDialog();
             fbd3.Description = "Select a folder you want to output the files.";
             fbd3.ShowDialog();
-            out_textbox.Text = fbd3.SelectedPath;
-
+            this.out_textbox.Text = fbd3.SelectedPath;
         }
 
-        public void OpenIDEs(string idefolda, string ydrfolda, string outfolda)
+        public void OpenIDEs(string idefolda, bool isLOD)
         {
             bool tobj = false;
             bool obj = false;
@@ -83,6 +77,7 @@ namespace IDE2YTYP
             {
 
                 YtypFile ytf = new YtypFile();
+                YtypFile lodytf = new YtypFile();
 
                 string filename = Path.GetFileNameWithoutExtension(ide);
 
@@ -120,31 +115,73 @@ namespace IDE2YTYP
                     if (obj)
                     {
 
-                        modelName = linesplitted[1].ToString().Trim(); //ModelName in IDE
-                        textureDic = linesplitted[2].ToString().Trim(); //TextureDictionary in IDE 
+                        modelName = linesplitted[1].Trim(); //ModelName in IDE
+                        textureDic = linesplitted[2].Trim(); //TextureDictionary in IDE 
 
-                        Archetype arc = new Archetype();
+                        
 
-                        arc._BaseArchetypeDef.assetName = JenkHash.GenHash(modelName);
-                        arc._BaseArchetypeDef.textureDictionary = JenkHash.GenHash(TextureDic);
-                        arc._BaseArchetypeDef.flags = 12582912;
-                        arc._BaseArchetypeDef.lodDist = float.Parse(lodist_textbox.Text);
-                        arc._BaseArchetypeDef.name = JenkHash.GenHash(modelName);
-                        arc._BaseArchetypeDef.hdTextureDist = float.Parse(hdtexturedist_textbox.Text);
-                        arc._BaseArchetypeDef.assetType = rage__fwArchetypeDef__eAssetType.ASSET_TYPE_DRAWABLE;
-                        arc._BaseArchetypeDef.bbMin = GetYDR(modelName).bbmin;
-                        arc._BaseArchetypeDef.bbMax = GetYDR(modelName).bbmax;
-                        arc._BaseArchetypeDef.bsCentre = GetYDR(modelName).bbcenter;
-                        arc._BaseArchetypeDef.bsRadius = GetYDR(modelName).bbsphere;
+                        if (isLOD)
+                        {
+                            if (modelName.Contains("lod"))
+                            {
+                                Archetype lodarc = new Archetype();
+                                lodarc._BaseArchetypeDef.assetName = JenkHash.GenHash(modelName);
+                                lodarc._BaseArchetypeDef.textureDictionary = JenkHash.GenHash(TextureDic);
+                                lodarc._BaseArchetypeDef.flags = 12582912;
+                                lodarc._BaseArchetypeDef.lodDist = float.Parse(lodist_textbox.Text);
+                                lodarc._BaseArchetypeDef.name = JenkHash.GenHash(modelName);
+                                lodarc._BaseArchetypeDef.hdTextureDist = float.Parse(hdtexturedist_textbox.Text);
+                                lodarc._BaseArchetypeDef.assetType = rage__fwArchetypeDef__eAssetType.ASSET_TYPE_DRAWABLE;
+                                lodarc._BaseArchetypeDef.bbMin = GetYDR(modelName).bbmin;
+                                lodarc._BaseArchetypeDef.bbMax = GetYDR(modelName).bbmax;
+                                lodarc._BaseArchetypeDef.bsCentre = GetYDR(modelName).bbcenter;
+                                lodarc._BaseArchetypeDef.bsRadius = GetYDR(modelName).bbsphere;
+                                lodytf.AddArchetype(lodarc);
+                            }
+                            else
+                            {
+                                Archetype arc = new Archetype();
+                                arc._BaseArchetypeDef.assetName = JenkHash.GenHash(modelName);
+                                arc._BaseArchetypeDef.textureDictionary = JenkHash.GenHash(TextureDic);
+                                arc._BaseArchetypeDef.flags = 12582912;
+                                arc._BaseArchetypeDef.lodDist = float.Parse(lodist_textbox.Text);
+                                arc._BaseArchetypeDef.name = JenkHash.GenHash(modelName);
+                                arc._BaseArchetypeDef.hdTextureDist = float.Parse(hdtexturedist_textbox.Text);
+                                arc._BaseArchetypeDef.assetType = rage__fwArchetypeDef__eAssetType.ASSET_TYPE_DRAWABLE;
+                                arc._BaseArchetypeDef.bbMin = GetYDR(modelName).bbmin;
+                                arc._BaseArchetypeDef.bbMax = GetYDR(modelName).bbmax;
+                                arc._BaseArchetypeDef.bsCentre = GetYDR(modelName).bbcenter;
+                                arc._BaseArchetypeDef.bsRadius = GetYDR(modelName).bbsphere;
+                                ytf.AddArchetype(arc);
+                            }
 
-                        ytf.AddArchetype(arc);
+                        }
+                        else
+                        {
+                            Archetype arc = new Archetype();
+                            arc._BaseArchetypeDef.assetName = JenkHash.GenHash(modelName);
+                            arc._BaseArchetypeDef.textureDictionary = JenkHash.GenHash(TextureDic);
+                            arc._BaseArchetypeDef.flags = 12582912;
+                            arc._BaseArchetypeDef.lodDist = float.Parse(lodist_textbox.Text);
+                            arc._BaseArchetypeDef.name = JenkHash.GenHash(modelName);
+                            arc._BaseArchetypeDef.hdTextureDist = float.Parse(hdtexturedist_textbox.Text);
+                            arc._BaseArchetypeDef.assetType = rage__fwArchetypeDef__eAssetType.ASSET_TYPE_DRAWABLE;
+                            arc._BaseArchetypeDef.bbMin = GetYDR(modelName).bbmin;
+                            arc._BaseArchetypeDef.bbMax = GetYDR(modelName).bbmax;
+                            arc._BaseArchetypeDef.bsCentre = GetYDR(modelName).bbcenter;
+                            arc._BaseArchetypeDef.bsRadius = GetYDR(modelName).bbsphere;
+                            ytf.AddArchetype(arc);
+
+                        }
+
+
                     }
 
                     if (tobj)
                     {
 
-                        modelNamet = linesplitted[1].ToString().Trim(); //ModelName in IDE
-                        textureDict = linesplitted[2].ToString().Trim(); //TextureDictionary in IDE 
+                        modelNamet = linesplitted[1].Trim(); //ModelName in IDE
+                        textureDict = linesplitted[2].Trim(); //TextureDictionary in IDE 
 
                         TimeArchetype tarc = new TimeArchetype();
 
@@ -167,6 +204,15 @@ namespace IDE2YTYP
                     //bw.ReportProgress((int)(progresoide * 100 / idelines.Length));
 
                 }
+
+                if (isLOD)
+                {
+                    byte[] newLodData = lodytf.Save();
+                    File.WriteAllBytes(folderout + "//" + filename + "_lod.ytyp", newLodData);
+                }
+                    
+
+
                 byte[] newData = ytf.Save();
                 File.WriteAllBytes(folderout + "//" + filename + ".ytyp", newData);
             }
@@ -178,7 +224,7 @@ namespace IDE2YTYP
 
             if (Check(folderide, folderydr, folderout).Item1 && Check(folderide, folderydr, folderout).Item2 && Check(folderide, folderydr, folderout).Item3)
             {
-                OpenIDEs(folderide, folderydr, folderout);
+                OpenIDEs(folderide, this.cbLOD.Checked);
                 MessageBox.Show("Done", "Complete", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 File.WriteAllText("missingmodels.txt", missing.ToString());
@@ -229,18 +275,18 @@ namespace IDE2YTYP
 
         private void ide_textbox_TextChanged(object sender, EventArgs e)
         {
-            folderide = ide_textbox.Text;
+            folderide = this.ide_textbox.Text;
         }
 
         private void ydr_textbox_TextChanged(object sender, EventArgs e)
         {
-            folderydr = ydr_textbox.Text;
+            folderydr = this.ydr_textbox.Text;
 
         }
 
         private void out_textbox_TextChanged(object sender, EventArgs e)
         {
-            folderout = out_textbox.Text;
+            folderout = this.out_textbox.Text;
 
         }
 

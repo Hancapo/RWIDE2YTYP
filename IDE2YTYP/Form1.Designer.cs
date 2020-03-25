@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(IDE2YTYP));
             this.browse_ide = new System.Windows.Forms.Button();
             this.ide_textbox = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -45,6 +46,7 @@
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.porcentaje = new System.Windows.Forms.Label();
             this.d = new System.Windows.Forms.GroupBox();
+            this.cbLOD = new System.Windows.Forms.CheckBox();
             this.d.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -65,7 +67,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.ide_textbox.Location = new System.Drawing.Point(190, 33);
             this.ide_textbox.Name = "ide_textbox";
-            this.ide_textbox.Size = new System.Drawing.Size(350, 20);
+            this.ide_textbox.Size = new System.Drawing.Size(341, 20);
             this.ide_textbox.TabIndex = 1;
             this.ide_textbox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.ide_textbox.TextChanged += new System.EventHandler(this.ide_textbox_TextChanged);
@@ -85,6 +87,7 @@
             this.ydr_textbox.Name = "ydr_textbox";
             this.ydr_textbox.Size = new System.Drawing.Size(350, 20);
             this.ydr_textbox.TabIndex = 1;
+            this.ydr_textbox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.ydr_textbox.TextChanged += new System.EventHandler(this.ydr_textbox_TextChanged);
             // 
             // label2
@@ -102,6 +105,7 @@
             this.out_textbox.Name = "out_textbox";
             this.out_textbox.Size = new System.Drawing.Size(350, 20);
             this.out_textbox.TabIndex = 1;
+            this.out_textbox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.out_textbox.TextChanged += new System.EventHandler(this.out_textbox_TextChanged);
             // 
             // label3
@@ -183,9 +187,9 @@
             // 
             // progressBar1
             // 
-            this.progressBar1.Location = new System.Drawing.Point(644, 59);
+            this.progressBar1.Location = new System.Drawing.Point(517, 185);
             this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(32, 20);
+            this.progressBar1.Size = new System.Drawing.Size(53, 20);
             this.progressBar1.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             this.progressBar1.TabIndex = 9;
             this.progressBar1.Visible = false;
@@ -193,7 +197,7 @@
             // porcentaje
             // 
             this.porcentaje.AutoSize = true;
-            this.porcentaje.Location = new System.Drawing.Point(641, 37);
+            this.porcentaje.Location = new System.Drawing.Point(529, 169);
             this.porcentaje.Name = "porcentaje";
             this.porcentaje.Size = new System.Drawing.Size(21, 13);
             this.porcentaje.TabIndex = 10;
@@ -206,6 +210,7 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.d.AutoSize = true;
+            this.d.Controls.Add(this.cbLOD);
             this.d.Controls.Add(this.ide_textbox);
             this.d.Controls.Add(this.porcentaje);
             this.d.Controls.Add(this.label1);
@@ -225,18 +230,29 @@
             this.d.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.d.Location = new System.Drawing.Point(12, 12);
             this.d.Name = "d";
-            this.d.Size = new System.Drawing.Size(760, 192);
+            this.d.Size = new System.Drawing.Size(704, 276);
             this.d.TabIndex = 11;
             this.d.TabStop = false;
+            // 
+            // cbLOD
+            // 
+            this.cbLOD.AutoSize = true;
+            this.cbLOD.Location = new System.Drawing.Point(102, 185);
+            this.cbLOD.Name = "cbLOD";
+            this.cbLOD.Size = new System.Drawing.Size(106, 17);
+            this.cbLOD.TabIndex = 11;
+            this.cbLOD.Text = "Split to LOD type";
+            this.cbLOD.UseVisualStyleBackColor = true;
             // 
             // IDE2YTYP
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.ClientSize = new System.Drawing.Size(784, 221);
+            this.ClientSize = new System.Drawing.Size(723, 305);
             this.Controls.Add(this.d);
             this.HelpButton = true;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximumSize = new System.Drawing.Size(800, 600);
             this.Name = "IDE2YTYP";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -267,6 +283,7 @@
         private System.Windows.Forms.ProgressBar progressBar1;
         private System.Windows.Forms.Label porcentaje;
         private System.Windows.Forms.GroupBox d;
+        private System.Windows.Forms.CheckBox cbLOD;
     }
 }
 
