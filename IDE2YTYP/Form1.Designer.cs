@@ -43,12 +43,10 @@
             this.lodist_textbox = new System.Windows.Forms.TextBox();
             this.hdtexturedist_textbox = new System.Windows.Forms.TextBox();
             this.s = new System.Windows.Forms.Label();
-            this.progressBar1 = new System.Windows.Forms.ProgressBar();
-            this.porcentaje = new System.Windows.Forms.Label();
             this.d = new System.Windows.Forms.GroupBox();
-            this.cbLOD = new System.Windows.Forms.CheckBox();
             this.txtStatus = new System.Windows.Forms.Label();
-            this.hScrollBar1 = new System.Windows.Forms.HScrollBar();
+            this.cbLOD = new System.Windows.Forms.CheckBox();
+            this.txtProcess = new System.Windows.Forms.Label();
             this.d.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -187,38 +185,17 @@
             this.s.TabIndex = 7;
             this.s.Text = "HD Texture Distance";
             // 
-            // progressBar1
-            // 
-            this.progressBar1.Location = new System.Drawing.Point(517, 185);
-            this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(53, 20);
-            this.progressBar1.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
-            this.progressBar1.TabIndex = 9;
-            this.progressBar1.Visible = false;
-            // 
-            // porcentaje
-            // 
-            this.porcentaje.AutoSize = true;
-            this.porcentaje.Location = new System.Drawing.Point(529, 169);
-            this.porcentaje.Name = "porcentaje";
-            this.porcentaje.Size = new System.Drawing.Size(21, 13);
-            this.porcentaje.TabIndex = 10;
-            this.porcentaje.Text = "0%";
-            this.porcentaje.Visible = false;
-            // 
             // d
             // 
             this.d.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.d.AutoSize = true;
-            this.d.Controls.Add(this.hScrollBar1);
+            this.d.Controls.Add(this.txtProcess);
             this.d.Controls.Add(this.txtStatus);
             this.d.Controls.Add(this.cbLOD);
             this.d.Controls.Add(this.ide_textbox);
-            this.d.Controls.Add(this.porcentaje);
             this.d.Controls.Add(this.label1);
-            this.d.Controls.Add(this.progressBar1);
             this.d.Controls.Add(this.label2);
             this.d.Controls.Add(this.lodist_textbox);
             this.d.Controls.Add(this.hdtexturedist_textbox);
@@ -234,9 +211,19 @@
             this.d.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.d.Location = new System.Drawing.Point(12, 12);
             this.d.Name = "d";
-            this.d.Size = new System.Drawing.Size(704, 374);
+            this.d.Size = new System.Drawing.Size(704, 371);
             this.d.TabIndex = 11;
             this.d.TabStop = false;
+            // 
+            // txtStatus
+            // 
+            this.txtStatus.AutoSize = true;
+            this.txtStatus.Location = new System.Drawing.Point(333, 218);
+            this.txtStatus.Name = "txtStatus";
+            this.txtStatus.Size = new System.Drawing.Size(61, 13);
+            this.txtStatus.TabIndex = 12;
+            this.txtStatus.Text = "No process";
+            this.txtStatus.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // cbLOD
             // 
@@ -248,28 +235,22 @@
             this.cbLOD.Text = "Split to LOD type";
             this.cbLOD.UseVisualStyleBackColor = true;
             // 
-            // txtStatus
+            // txtProcess
             // 
-            this.txtStatus.AutoSize = true;
-            this.txtStatus.Location = new System.Drawing.Point(345, 204);
-            this.txtStatus.Name = "txtStatus";
-            this.txtStatus.Size = new System.Drawing.Size(24, 13);
-            this.txtStatus.TabIndex = 12;
-            this.txtStatus.Text = "Idle";
-            // 
-            // hScrollBar1
-            // 
-            this.hScrollBar1.Location = new System.Drawing.Point(505, 223);
-            this.hScrollBar1.Name = "hScrollBar1";
-            this.hScrollBar1.Size = new System.Drawing.Size(153, 17);
-            this.hScrollBar1.TabIndex = 13;
+            this.txtProcess.AutoSize = true;
+            this.txtProcess.Location = new System.Drawing.Point(353, 189);
+            this.txtProcess.Name = "txtProcess";
+            this.txtProcess.Size = new System.Drawing.Size(24, 13);
+            this.txtProcess.TabIndex = 14;
+            this.txtProcess.Text = "Idle";
+            this.txtProcess.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // IDE2YTYP
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.ClientSize = new System.Drawing.Size(723, 403);
+            this.ClientSize = new System.Drawing.Size(723, 289);
             this.Controls.Add(this.d);
             this.HelpButton = true;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -300,12 +281,10 @@
         private System.Windows.Forms.TextBox lodist_textbox;
         private System.Windows.Forms.TextBox hdtexturedist_textbox;
         private System.Windows.Forms.Label s;
-        private System.Windows.Forms.ProgressBar progressBar1;
-        private System.Windows.Forms.Label porcentaje;
         private System.Windows.Forms.GroupBox d;
         private System.Windows.Forms.CheckBox cbLOD;
         private System.Windows.Forms.Label txtStatus;
-        private System.Windows.Forms.HScrollBar hScrollBar1;
+        private System.Windows.Forms.Label txtProcess;
     }
 }
 

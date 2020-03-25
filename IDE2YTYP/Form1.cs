@@ -18,7 +18,6 @@ namespace IDE2YTYP
 
         private static StringBuilder missing = new StringBuilder();
 
-
         private string modelName;
         private string textureDic;
 
@@ -34,7 +33,7 @@ namespace IDE2YTYP
         {
             InitializeComponent();
             missing.Clear();
-            
+            CheckForIllegalCrossThreadCalls = false;
         }
 
 
@@ -43,7 +42,7 @@ namespace IDE2YTYP
             FolderBrowserDialog fbd = new FolderBrowserDialog();
             fbd.Description = "Select a folder that contains your IDEs files.";
             fbd.ShowDialog();
-            this.ide_textbox.Text = fbd.SelectedPath;
+            ide_textbox.Text = fbd.SelectedPath;
         }
 
         private void browse_ydr_Click(object sender, EventArgs e)
@@ -51,7 +50,7 @@ namespace IDE2YTYP
             FolderBrowserDialog fbd2 = new FolderBrowserDialog();
             fbd2.Description = "Select a folder that contains your YDRs files.";
             fbd2.ShowDialog();
-            this.ydr_textbox.Text = fbd2.SelectedPath;
+            ydr_textbox.Text = fbd2.SelectedPath;
         }
 
         private void browse_out_Click(object sender, EventArgs e)
@@ -60,15 +59,17 @@ namespace IDE2YTYP
             FolderBrowserDialog fbd3 = new FolderBrowserDialog();
             fbd3.Description = "Select a folder you want to output the files.";
             fbd3.ShowDialog();
-            this.out_textbox.Text = fbd3.SelectedPath;
+            out_textbox.Text = fbd3.SelectedPath;
         }
 
         public async Task OpenIDEs(string idefolda, bool isLOD)
         {
 
+            DisableControls();
 
             bool tobj = false;
             bool obj = false;
+            int idecount = 0;
 
             bool issom = (tobj || obj);
 
@@ -88,7 +89,9 @@ namespace IDE2YTYP
 
                     missing.AppendLine(filename + " missing models: ");
 
-                    int idecount;
+                    idecount += 1;
+                    txtProcess.ForeColor = System.Drawing.Color.Red;
+                    txtProcess.Text = idecount + " of " + idefiles.Length;
 
                     string[] idelines = File.ReadAllLines(ide);
 
@@ -124,7 +127,8 @@ namespace IDE2YTYP
 
                             ModelName = linesplitted[1].Trim(); //ModelName in IDE
                             TextureDic = linesplitted[2].Trim(); //TextureDictionary in IDE 
-
+                            txtStatus.ForeColor = System.Drawing.Color.Green;
+                            txtStatus.Text = "Processing " + ModelName + "...";
 
 
                             if (isLOD)
@@ -189,7 +193,7 @@ namespace IDE2YTYP
 
                             ModelNamet = linesplitted[1].Trim(); //ModelName in IDE
                             TextureDict = linesplitted[2].Trim(); //TextureDictionary in IDE 
-
+                            txtStatus.Text = "Processing " + ModelNamet + "...";
                             TimeArchetype tarc = new TimeArchetype();
 
                             tarc._TimeArchetypeDef._BaseArchetypeDef.assetName = JenkHash.GenHash(ModelNamet);
@@ -208,7 +212,6 @@ namespace IDE2YTYP
                             ytf.AddArchetype(tarc);
                         }
 
-                        //bw.ReportProgress((int)(progresoide * 100 / idelines.Length));
 
                     }
 
@@ -228,7 +231,6 @@ namespace IDE2YTYP
             await tk;
 
 
-
         }
 
         private async void convert_button_Click(object sender, EventArgs e)
@@ -236,9 +238,16 @@ namespace IDE2YTYP
 
             if (Check(folderide, folderydr, folderout).Item1 && Check(folderide, folderydr, folderout).Item2 && Check(folderide, folderydr, folderout).Item3)
             {
-                await OpenIDEs(folderide, this.cbLOD.Checked);
-                MessageBox.Show("Done", "Complete!", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                
 
+                await OpenIDEs(folderide, this.cbLOD.Checked);
+
+                MessageBox.Show("Done", "Complete!", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                EnableControls();
+                txtProcess.ForeColor = System.Drawing.Color.Black;
+                txtProcess.Text = "Idle";
+                txtStatus.ForeColor = System.Drawing.Color.Black;
+                txtStatus.Text = "No Process";
                 File.WriteAllText("missingmodels.txt", missing.ToString());
             }
         }
@@ -342,6 +351,34 @@ namespace IDE2YTYP
             }
 
             return (thereiside, thereisydr, thereisout);
+        }
+
+        private void EnableControls()
+        {
+            ide_textbox.ReadOnly = false;
+            ydr_textbox.ReadOnly = false;
+            out_textbox.ReadOnly = false;
+            lodist_textbox.ReadOnly = false;
+            hdtexturedist_textbox.ReadOnly = false;
+            convert_button.Enabled = true;
+            cbLOD.Enabled = true;
+            browse_ide.Enabled = true;
+            browse_out.Enabled = true;
+            browse_ydr.Enabled = true;
+        }
+
+        private void DisableControls()
+        {
+            ide_textbox.ReadOnly = true;
+            ydr_textbox.ReadOnly = true;
+            out_textbox.ReadOnly = true;
+            lodist_textbox.ReadOnly = true;
+            hdtexturedist_textbox.ReadOnly = true;
+            convert_button.Enabled = false;
+            cbLOD.Enabled = false;
+            browse_ide.Enabled = false;
+            browse_out.Enabled = false;
+            browse_ydr.Enabled = false;
         }
 
     }
