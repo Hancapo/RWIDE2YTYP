@@ -1,23 +1,25 @@
-﻿using CodeWalker.GameFiles;
-using SharpDX;
-using System;
-using System.IO;
-using System.Text;
-using System.Windows.Forms;
-using System.Collections.Generic;
+﻿using System;
 using System.Threading.Tasks;
+using CodeWalker.GameFiles;
+using System.IO;
+using SharpDX;
+using System.Windows.Forms;
 using System.Drawing;
-using Color = System.Drawing.Color;
-using MaterialSkin;
-using MaterialSkin.Controls;
+using System.Text;
+using System.Windows;
+using System.Windows.Media;
+using System.Windows.Threading;
 
-namespace IDE2YTYP
+namespace IDE_Processor
 {
-    public partial class IDE2YTYP : MaterialForm
+    /// <summary>
+    /// Lógica de interacción para MainWindow.xaml
+    /// </summary>
+    public partial class MainWindow : Window
     {
 
         private string folderide;
-        private string folderydr;
+        private string foldermodels;
         private string folderout;
 
         private static StringBuilder missing = new StringBuilder();
@@ -33,62 +35,29 @@ namespace IDE2YTYP
         public string ModelNamet { get => modelNamet; set => modelNamet = value; }
         public string TextureDict { get => textureDict; set => textureDict = value; }
 
-        public IDE2YTYP()
+        public MainWindow()
         {
             InitializeComponent();
-            missing.Clear();
-            var materialSkinManager = MaterialSkinManager.Instance;
-            materialSkinManager.AddFormToManage(this);
-            materialSkinManager.Theme = MaterialSkinManager.Themes.LIGHT;
-            materialSkinManager.ColorScheme = new ColorScheme(Primary.BlueGrey800, Primary.BlueGrey900, Primary.BlueGrey500, Accent.LightBlue200, TextShade.WHITE);
-            CheckForIllegalCrossThreadCalls = false;
+            Control.CheckForIllegalCrossThreadCalls = false;
         }
 
-
-        private void browse_ide_Click(object sender, EventArgs e)
+        private async void btnConvert_Click(object sender, RoutedEventArgs e)
         {
-            FolderBrowserDialog fbd = new FolderBrowserDialog();
-            fbd.Description = "Select a folder that contains your IDEs files.";
-            fbd.ShowDialog();
-            ide_textbox.Text = fbd.SelectedPath;
-        }
-
-        private void browse_ydr_Click(object sender, EventArgs e)
-        {
-            FolderBrowserDialog fbd2 = new FolderBrowserDialog();
-            fbd2.Description = "Select a folder that contains your YDRs files.";
-            fbd2.ShowDialog();
-            ydr_textbox.Text = fbd2.SelectedPath;
-        }
-
-        private void browse_out_Click(object sender, EventArgs e)
-        {
-
-            FolderBrowserDialog fbd3 = new FolderBrowserDialog();
-            fbd3.Description = "Select a folder you want to output the files.";
-            fbd3.ShowDialog();
-            out_textbox.Text = fbd3.SelectedPath;
-        }
-
-
-        private async void convert_button_Click(object sender, EventArgs e)
-        {
-
-            if (Check(folderide, folderydr, folderout).Item1 && Check(folderide, folderydr, folderout).Item2 && Check(folderide, folderydr, folderout).Item3)
+            if (Check(folderide, foldermodels, folderout).Item1 && Check(folderide, foldermodels, folderout).Item2 && Check(folderide, foldermodels, folderout).Item3)
             {
-                
 
-                await ExportYTYP(folderide, cbLOD.Checked).ConfigureAwait(false);
 
-                MessageBox.Show("Done", "Complete!", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                await ExportYTYP(folderide, cbLODtype.IsChecked.GetValueOrDefault()).ConfigureAwait(false);
+
+                System.Windows.Forms.MessageBox.Show("Done", "Complete!", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 EnableControls();
-                txtIDE.ForeColor = Color.Black;
-                txtIDE.Text = "Idle";
-                txtEntities.ForeColor = Color.Black;
-                txtEntities.Text = "No entity process";
+                //lbIDE.Foreground = new System.Windows.Media.Brush(System.Drawing.Color.White);
+                //txtStatus.ForeColor = System.Drawing.Color.Black;
+                lbEntitie.Content = "No entities";
                 File.WriteAllText("missingmodels.txt", missing.ToString());
             }
         }
+
 
         public async Task ExportYTYP(string idefolda, bool isLOD)
         {
@@ -118,8 +87,8 @@ namespace IDE2YTYP
                     missing.AppendLine(filename + " missing models: ");
 
                     idecount += 1;
-                    txtIDE.ForeColor = Color.Red;
-                    txtIDE.Text = idecount + " of " + idefiles.Length;
+                    //txtProcess.ForeColor = Color.Red;
+                    //lbIDE.Content = idecount + " of " + idefiles.Length;
 
                     string[] idelines = File.ReadAllLines(ide);
 
@@ -155,8 +124,8 @@ namespace IDE2YTYP
 
                             ModelName = linesplitted[1].Trim(); //ModelName in IDE
                             TextureDic = linesplitted[2].Trim(); //TextureDictionary in IDE 
-                            txtEntities.ForeColor = System.Drawing.Color.Green;
-                            txtEntities.Text = "Processing " + ModelName + "...";
+                            //txtStatus.ForeColor = System.Drawing.Color.Green;
+                            //lbEntitie.Content = "Processing " + ModelName + "...";
 
 
                             if (isLOD)
@@ -167,9 +136,9 @@ namespace IDE2YTYP
                                     lodarc._BaseArchetypeDef.assetName = JenkHash.GenHash(ModelName);
                                     lodarc._BaseArchetypeDef.textureDictionary = JenkHash.GenHash(TextureDic);
                                     lodarc._BaseArchetypeDef.flags = 12582912;
-                                    lodarc._BaseArchetypeDef.lodDist = float.Parse(lodist_textbox.Text);
+                                    lodarc._BaseArchetypeDef.lodDist = float.Parse(this.tbLOD.Text);
                                     lodarc._BaseArchetypeDef.name = JenkHash.GenHash(ModelName);
-                                    lodarc._BaseArchetypeDef.hdTextureDist = float.Parse(hdtexturedist_textbox.Text);
+                                    lodarc._BaseArchetypeDef.hdTextureDist = float.Parse(tbHDTex.Text);
                                     lodarc._BaseArchetypeDef.assetType = rage__fwArchetypeDef__eAssetType.ASSET_TYPE_DRAWABLE;
                                     lodarc._BaseArchetypeDef.bbMin = GetYDR(ModelName).bbmin;
                                     lodarc._BaseArchetypeDef.bbMax = GetYDR(ModelName).bbmax;
@@ -183,9 +152,9 @@ namespace IDE2YTYP
                                     arc._BaseArchetypeDef.assetName = JenkHash.GenHash(ModelName);
                                     arc._BaseArchetypeDef.textureDictionary = JenkHash.GenHash(TextureDic);
                                     arc._BaseArchetypeDef.flags = 12582912;
-                                    arc._BaseArchetypeDef.lodDist = float.Parse(lodist_textbox.Text);
+                                    arc._BaseArchetypeDef.lodDist = float.Parse(this.tbLOD.Text);
                                     arc._BaseArchetypeDef.name = JenkHash.GenHash(ModelName);
-                                    arc._BaseArchetypeDef.hdTextureDist = float.Parse(hdtexturedist_textbox.Text);
+                                    arc._BaseArchetypeDef.hdTextureDist = float.Parse(tbHDTex.Text);
                                     arc._BaseArchetypeDef.assetType = rage__fwArchetypeDef__eAssetType.ASSET_TYPE_DRAWABLE;
                                     arc._BaseArchetypeDef.bbMin = GetYDR(ModelName).bbmin;
                                     arc._BaseArchetypeDef.bbMax = GetYDR(ModelName).bbmax;
@@ -201,9 +170,9 @@ namespace IDE2YTYP
                                 arc._BaseArchetypeDef.assetName = JenkHash.GenHash(ModelName);
                                 arc._BaseArchetypeDef.textureDictionary = JenkHash.GenHash(TextureDic);
                                 arc._BaseArchetypeDef.flags = 12582912;
-                                arc._BaseArchetypeDef.lodDist = float.Parse(lodist_textbox.Text);
+                                arc._BaseArchetypeDef.lodDist = float.Parse(tbLOD.Text);
                                 arc._BaseArchetypeDef.name = JenkHash.GenHash(ModelName);
-                                arc._BaseArchetypeDef.hdTextureDist = float.Parse(hdtexturedist_textbox.Text);
+                                arc._BaseArchetypeDef.hdTextureDist = float.Parse(tbHDTex.Text);
                                 arc._BaseArchetypeDef.assetType = rage__fwArchetypeDef__eAssetType.ASSET_TYPE_DRAWABLE;
                                 arc._BaseArchetypeDef.bbMin = GetYDR(ModelName).bbmin;
                                 arc._BaseArchetypeDef.bbMax = GetYDR(ModelName).bbmax;
@@ -221,15 +190,15 @@ namespace IDE2YTYP
 
                             ModelNamet = linesplitted[1].Trim(); //ModelName in IDE
                             TextureDict = linesplitted[2].Trim(); //TextureDictionary in IDE 
-                            txtEntities.Text = "Processing " + ModelNamet + "...";
+                            //lbEntitie.Content = "Processing " + ModelNamet + "...";
                             TimeArchetype tarc = new TimeArchetype();
 
                             tarc._TimeArchetypeDef._BaseArchetypeDef.assetName = JenkHash.GenHash(ModelNamet);
                             tarc._TimeArchetypeDef._BaseArchetypeDef.textureDictionary = JenkHash.GenHash(TextureDict);
                             tarc._TimeArchetypeDef._BaseArchetypeDef.flags = 12582912;
-                            tarc._TimeArchetypeDef._BaseArchetypeDef.lodDist = float.Parse(lodist_textbox.Text);
+                            tarc._TimeArchetypeDef._BaseArchetypeDef.lodDist = float.Parse(tbLOD.Text);
                             tarc._TimeArchetypeDef._BaseArchetypeDef.name = JenkHash.GenHash(ModelNamet);
-                            tarc._TimeArchetypeDef._BaseArchetypeDef.hdTextureDist = float.Parse(hdtexturedist_textbox.Text);
+                            tarc._TimeArchetypeDef._BaseArchetypeDef.hdTextureDist = float.Parse(tbHDTex.Text);
                             tarc._TimeArchetypeDef._BaseArchetypeDef.assetType = rage__fwArchetypeDef__eAssetType.ASSET_TYPE_DRAWABLE;
                             tarc._TimeArchetypeDef._BaseArchetypeDef.bbMax = GetYDR(ModelNamet).bbmax;
                             tarc._TimeArchetypeDef._BaseArchetypeDef.bbMin = GetYDR(ModelNamet).bbmin;
@@ -250,8 +219,8 @@ namespace IDE2YTYP
 
                         if (File.Exists(LODytfFolder))
                         {
-                            DialogResult result = MessageBox.Show("The file " + filename + "_lod.ytyp" + " already exists. \nDo you want to overwrite it?", "Alert", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-                            if (result == DialogResult.Yes)
+                            DialogResult result = System.Windows.Forms.MessageBox.Show("The file " + filename + "_lod.ytyp" + " already exists. \nDo you want to overwrite it?", "Alert", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                            if (result == System.Windows.Forms.DialogResult.Yes)
                             {
 
                                 File.WriteAllBytes(LODytfFolder, newLodData);
@@ -277,8 +246,8 @@ namespace IDE2YTYP
 
                     if (File.Exists(ytfFolder))
                     {
-                        DialogResult result = MessageBox.Show("The file " + filename + ".ytyp" + " already exists. \nDo you want to overwrite it?", "Alert", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-                        if (result == DialogResult.Yes)
+                        DialogResult result = System.Windows.Forms.MessageBox.Show("The file " + filename + " already exists. \nDo you want to overwrite it?", "Alert", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                        if (result == System.Windows.Forms.DialogResult.Yes)
                         {
 
                             File.WriteAllBytes(ytfFolder, newData);
@@ -302,7 +271,6 @@ namespace IDE2YTYP
 
         }
 
-
         public (Vector3 bbmax, Vector3 bbmin, Vector3 bbcenter, float bbsphere) GetYDR(string file)
         {
 
@@ -314,7 +282,7 @@ namespace IDE2YTYP
             try
             {
                 YdrFile yd = new YdrFile();
-                byte[] data = File.ReadAllBytes(folderydr + "//" + file + ".ydr");
+                byte[] data = File.ReadAllBytes(foldermodels + "//" + file + ".ydr");
                 RpfFile.LoadResourceFile<YdrFile>(yd, data, 165);
 
                 bbmax = yd.Drawable.BoundingBoxMax;
@@ -345,91 +313,117 @@ namespace IDE2YTYP
 
         }
 
-        private void ide_textbox_TextChanged(object sender, EventArgs e)
+        private void EnableControls()
         {
-            folderide = this.ide_textbox.Text;
+            tbIDE.IsReadOnly = false;
+            tbModels.IsReadOnly = false;
+            tbOutput.IsReadOnly = false;
+            tbHDTex.IsReadOnly = false;
+            tbLOD.IsReadOnly = false;
+            btnConvert.IsEnabled = true;
+            btBrowseModels.IsEnabled = true;
+            btBrowseIDE.IsEnabled = true;
+            btBrowseOut.IsEnabled = true;
+
+            cbLODtype.IsEnabled = true;
         }
 
-        private void ydr_textbox_TextChanged(object sender, EventArgs e)
+        private void DisableControls()
         {
-            folderydr = this.ydr_textbox.Text;
+            tbIDE.IsReadOnly = true;
+            tbModels.IsReadOnly = true;
+            tbOutput.IsReadOnly = true;
+            tbHDTex.IsReadOnly = true;
+            tbLOD.IsReadOnly = true;
+            btnConvert.IsEnabled = false;
+            btBrowseModels.IsEnabled = false;
+            btBrowseIDE.IsEnabled = false;
+            btBrowseOut.IsEnabled = false;
 
+            cbLODtype.IsEnabled = false;
         }
 
-        private void out_textbox_TextChanged(object sender, EventArgs e)
+        private void btBrowseIDE_Click(object sender, RoutedEventArgs e)
         {
-            folderout = this.out_textbox.Text;
+            FolderBrowserDialog fbd = new FolderBrowserDialog();
+            fbd.Description = "Select a folder that contains your IDE files.";
+            fbd.ShowDialog();
+            tbIDE.Text = fbd.SelectedPath;
+        }
 
+        private void btBrowseOut_Click(object sender, RoutedEventArgs e)
+        {
+            FolderBrowserDialog fbd3 = new FolderBrowserDialog();
+            fbd3.Description = "Select a folder you want to output the files.";
+            fbd3.ShowDialog();
+            tbOutput.Text = fbd3.SelectedPath;
+        }
+
+        private void btBrowseModels_Click(object sender, RoutedEventArgs e)
+        {
+            FolderBrowserDialog fbd2 = new FolderBrowserDialog();
+            fbd2.Description = "Select a folder that contains your Models files.";
+            fbd2.ShowDialog();
+            tbModels.Text = fbd2.SelectedPath;
         }
 
         private static (bool, bool, bool) Check(string idepath, string ydrpath, string outpath)
         {
-            bool Thereiside;
-            bool Thereisydr;
-            bool Thereisout;
+            bool thereiside = false;
+            bool thereisydr = false;
+            bool thereisout = false;
 
             if (string.IsNullOrEmpty(idepath))
             {
-                MessageBox.Show("IDE Path cannot be empty, please select a path and try again.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                Thereiside = false;
+                System.Windows.Forms.MessageBox.Show("IDE Path cannot be empty, please select a path and try again.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                thereiside = false;
             }
             else
             {
-                Thereiside = true;
+                thereiside = true;
 
             }
 
             if (string.IsNullOrEmpty(ydrpath))
             {
-                MessageBox.Show("YDR Path cannot be empty, please select a path and try again.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                Thereisydr = false;
+                System.Windows.Forms.MessageBox.Show("YDR Path cannot be empty, please select a path and try again.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                thereisydr = false;
             }
             else
             {
-                Thereisydr = true;
+                thereisydr = true;
 
             }
 
             if (string.IsNullOrEmpty(outpath))
             {
-                MessageBox.Show("Output Path cannot be empty, please select a path and try again.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                Thereisout = false;
+                System.Windows.Forms.MessageBox.Show("Output Path cannot be empty, please select a path and try again.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                thereisout = false;
             }
             else
             {
-                Thereisout = true;
+                thereisout = true;
 
             }
 
-            return (Thereiside, Thereisydr, Thereisout);
+            return (thereiside, thereisydr, thereisout);
         }
 
-        private void EnableControls()
+        private void tbIDE_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
         {
-            ide_textbox.ReadOnly = false;
-            ydr_textbox.ReadOnly = false;
-            out_textbox.ReadOnly = false;
-            lodist_textbox.ReadOnly = false;
-            hdtexturedist_textbox.ReadOnly = false;
-            convert_button.Enabled = true;
-            cbLOD.Enabled = true;
-            browse_ide.Enabled = true;
-            browse_out.Enabled = true;
-            browse_ydr.Enabled = true;
+            folderide = tbIDE.Text;
         }
 
-        private void DisableControls()
+        private void tbModels_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
         {
-            ide_textbox.ReadOnly = true;
-            ydr_textbox.ReadOnly = true;
-            out_textbox.ReadOnly = true;
-            lodist_textbox.ReadOnly = true;
-            hdtexturedist_textbox.ReadOnly = true;
-            convert_button.Enabled = false;
-            cbLOD.Enabled = false;
-            browse_ide.Enabled = false;
-            browse_out.Enabled = false;
-            browse_ydr.Enabled = false;
+            foldermodels = tbModels.Text;
+
+        }
+
+        private void tbOutput_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        {
+            folderout = tbOutput.Text;
+
         }
     }
 }
