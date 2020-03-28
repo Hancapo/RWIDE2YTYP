@@ -41,6 +41,7 @@
             this.txtEntities = new MaterialSkin.Controls.MaterialLabel();
             this.lodist_textbox = new MaterialSkin.Controls.MaterialTextBox();
             this.hdtexturedist_textbox = new MaterialSkin.Controls.MaterialTextBox();
+            this.cbOutputGame = new MaterialSkin.Controls.MaterialComboBox();
             this.SuspendLayout();
             // 
             // convert_button
@@ -52,7 +53,7 @@
             this.convert_button.Font = new System.Drawing.Font("Microsoft JhengHei Light", 48F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.convert_button.HighEmphasis = true;
             this.convert_button.Icon = null;
-            this.convert_button.Location = new System.Drawing.Point(420, 354);
+            this.convert_button.Location = new System.Drawing.Point(423, 375);
             this.convert_button.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.convert_button.MouseState = MaterialSkin.MouseState.HOVER;
             this.convert_button.Name = "convert_button";
@@ -70,7 +71,7 @@
             this.ide_textbox.Depth = 0;
             this.ide_textbox.Font = new System.Drawing.Font("Roboto", 12F);
             this.ide_textbox.Hint = "IDE folder";
-            this.ide_textbox.Location = new System.Drawing.Point(35, 138);
+            this.ide_textbox.Location = new System.Drawing.Point(38, 159);
             this.ide_textbox.MaxLength = 200;
             this.ide_textbox.MouseState = MaterialSkin.MouseState.OUT;
             this.ide_textbox.Multiline = false;
@@ -88,7 +89,7 @@
             this.browse_ide.DrawShadows = true;
             this.browse_ide.HighEmphasis = true;
             this.browse_ide.Icon = null;
-            this.browse_ide.Location = new System.Drawing.Point(866, 145);
+            this.browse_ide.Location = new System.Drawing.Point(869, 166);
             this.browse_ide.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.browse_ide.MouseState = MaterialSkin.MouseState.HOVER;
             this.browse_ide.Name = "browse_ide";
@@ -106,7 +107,7 @@
             this.ydr_textbox.Depth = 0;
             this.ydr_textbox.Font = new System.Drawing.Font("Roboto", 12F);
             this.ydr_textbox.Hint = "Models folder";
-            this.ydr_textbox.Location = new System.Drawing.Point(35, 217);
+            this.ydr_textbox.Location = new System.Drawing.Point(38, 238);
             this.ydr_textbox.MaxLength = 200;
             this.ydr_textbox.MouseState = MaterialSkin.MouseState.OUT;
             this.ydr_textbox.Multiline = false;
@@ -124,7 +125,7 @@
             this.browse_ydr.DrawShadows = true;
             this.browse_ydr.HighEmphasis = true;
             this.browse_ydr.Icon = null;
-            this.browse_ydr.Location = new System.Drawing.Point(866, 224);
+            this.browse_ydr.Location = new System.Drawing.Point(869, 245);
             this.browse_ydr.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.browse_ydr.MouseState = MaterialSkin.MouseState.HOVER;
             this.browse_ydr.Name = "browse_ydr";
@@ -140,7 +141,7 @@
             // 
             this.cbLOD.AutoSize = true;
             this.cbLOD.Depth = 0;
-            this.cbLOD.Location = new System.Drawing.Point(378, 83);
+            this.cbLOD.Location = new System.Drawing.Point(38, 104);
             this.cbLOD.Margin = new System.Windows.Forms.Padding(0);
             this.cbLOD.MouseLocation = new System.Drawing.Point(-1, -1);
             this.cbLOD.MouseState = MaterialSkin.MouseState.HOVER;
@@ -157,7 +158,7 @@
             this.out_textbox.Depth = 0;
             this.out_textbox.Font = new System.Drawing.Font("Roboto", 12F);
             this.out_textbox.Hint = "Output files";
-            this.out_textbox.Location = new System.Drawing.Point(35, 295);
+            this.out_textbox.Location = new System.Drawing.Point(38, 316);
             this.out_textbox.MaxLength = 200;
             this.out_textbox.MouseState = MaterialSkin.MouseState.OUT;
             this.out_textbox.Multiline = false;
@@ -175,7 +176,7 @@
             this.browse_out.DrawShadows = true;
             this.browse_out.HighEmphasis = true;
             this.browse_out.Icon = null;
-            this.browse_out.Location = new System.Drawing.Point(866, 302);
+            this.browse_out.Location = new System.Drawing.Point(869, 323);
             this.browse_out.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.browse_out.MouseState = MaterialSkin.MouseState.HOVER;
             this.browse_out.Name = "browse_out";
@@ -191,7 +192,7 @@
             // 
             this.txtIDE.Depth = 0;
             this.txtIDE.Font = new System.Drawing.Font("Roboto", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.txtIDE.Location = new System.Drawing.Point(360, 408);
+            this.txtIDE.Location = new System.Drawing.Point(363, 429);
             this.txtIDE.MouseState = MaterialSkin.MouseState.HOVER;
             this.txtIDE.Name = "txtIDE";
             this.txtIDE.Size = new System.Drawing.Size(199, 23);
@@ -203,7 +204,7 @@
             // 
             this.txtEntities.Depth = 0;
             this.txtEntities.Font = new System.Drawing.Font("Roboto", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.txtEntities.Location = new System.Drawing.Point(268, 446);
+            this.txtEntities.Location = new System.Drawing.Point(271, 467);
             this.txtEntities.MouseState = MaterialSkin.MouseState.HOVER;
             this.txtEntities.Name = "txtEntities";
             this.txtEntities.Size = new System.Drawing.Size(386, 45);
@@ -215,9 +216,9 @@
             // 
             this.lodist_textbox.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.lodist_textbox.Depth = 0;
-            this.lodist_textbox.Font = new System.Drawing.Font("Roboto", 12F);
+            this.lodist_textbox.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
             this.lodist_textbox.Hint = "LOD Distance";
-            this.lodist_textbox.Location = new System.Drawing.Point(35, 409);
+            this.lodist_textbox.Location = new System.Drawing.Point(38, 430);
             this.lodist_textbox.MaxLength = 5;
             this.lodist_textbox.MouseState = MaterialSkin.MouseState.OUT;
             this.lodist_textbox.Multiline = false;
@@ -232,7 +233,7 @@
             this.hdtexturedist_textbox.Depth = 0;
             this.hdtexturedist_textbox.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
             this.hdtexturedist_textbox.Hint = "HD Tex. Distance";
-            this.hdtexturedist_textbox.Location = new System.Drawing.Point(709, 407);
+            this.hdtexturedist_textbox.Location = new System.Drawing.Point(712, 428);
             this.hdtexturedist_textbox.MaxLength = 3;
             this.hdtexturedist_textbox.MouseState = MaterialSkin.MouseState.OUT;
             this.hdtexturedist_textbox.Multiline = false;
@@ -242,12 +243,39 @@
             this.hdtexturedist_textbox.TabIndex = 23;
             this.hdtexturedist_textbox.Text = "200";
             // 
+            // cbOutputGame
+            // 
+            this.cbOutputGame.AutoResize = false;
+            this.cbOutputGame.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.cbOutputGame.Depth = 0;
+            this.cbOutputGame.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
+            this.cbOutputGame.DropDownHeight = 174;
+            this.cbOutputGame.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbOutputGame.DropDownWidth = 121;
+            this.cbOutputGame.Font = new System.Drawing.Font("Roboto Medium", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Pixel);
+            this.cbOutputGame.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.cbOutputGame.FormattingEnabled = true;
+            this.cbOutputGame.Hint = "Game Output";
+            this.cbOutputGame.IntegralHeight = false;
+            this.cbOutputGame.ItemHeight = 43;
+            this.cbOutputGame.Items.AddRange(new object[] {
+            "V",
+            "IV"});
+            this.cbOutputGame.Location = new System.Drawing.Point(710, 92);
+            this.cbOutputGame.MaxDropDownItems = 4;
+            this.cbOutputGame.MouseState = MaterialSkin.MouseState.OUT;
+            this.cbOutputGame.Name = "cbOutputGame";
+            this.cbOutputGame.Size = new System.Drawing.Size(152, 49);
+            this.cbOutputGame.TabIndex = 25;
+            this.cbOutputGame.SelectedIndexChanged += new System.EventHandler(this.cbOutputGame_SelectedIndexChanged);
+            // 
             // IDE2YTYP
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.ClientSize = new System.Drawing.Size(980, 513);
+            this.ClientSize = new System.Drawing.Size(987, 525);
+            this.Controls.Add(this.cbOutputGame);
             this.Controls.Add(this.hdtexturedist_textbox);
             this.Controls.Add(this.lodist_textbox);
             this.Controls.Add(this.txtEntities);
@@ -286,6 +314,7 @@
         private MaterialSkin.Controls.MaterialLabel txtEntities;
         private MaterialSkin.Controls.MaterialTextBox lodist_textbox;
         private MaterialSkin.Controls.MaterialTextBox hdtexturedist_textbox;
+        private MaterialSkin.Controls.MaterialComboBox cbOutputGame;
     }
 }
 
