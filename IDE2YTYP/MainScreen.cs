@@ -8,6 +8,7 @@ using Color = System.Drawing.Color;
 using MaterialSkin;
 using MaterialSkin.Controls;
 using System.Text;
+using System.Linq;
 
 namespace IDE2YTYP
 {
@@ -34,7 +35,7 @@ namespace IDE2YTYP
         public string TextureDict { get => textureDict; set => textureDict = value; }
         public StringBuilder Missing { get => missing; set => missing = value; }
         public string LodDist { get => lodDist; set => lodDist = value; }
-               public string Folderide { get => folderide; set => folderide = value; }
+        public string Folderide { get => folderide; set => folderide = value; }
         public string Folderydr { get => folderydr; set => folderydr = value; }
         public string Folderout { get => folderout; set => folderout = value; }
 
@@ -81,37 +82,46 @@ namespace IDE2YTYP
         private async void convert_button_Click(object sender, EventArgs e)
         {
 
-            if (Check(Folderide, Folderydr, Folderout).Item1 && Check(Folderide, Folderydr, Folderout).Item2 && Check(Folderide, Folderydr, Folderout).Item3)
+            if (cbOutputGame.SelectedIndex == 0)
             {
 
-                CheckForIllegalCrossThreadCalls = false;
-
-                if (cbOutputGame.SelectedIndex == 0)
+                if (Check(Folderide, Folderydr, Folderout).Item1 && Check(Folderide, Folderydr, Folderout).Item2 && Check(Folderide, Folderydr, Folderout).Item3 && cbOutputGame.SelectedItem == null)
                 {
-                    await ExportOutputV(Folderide, cbLOD.Checked).ConfigureAwait(false);
+                    try
+                    {
+                        await ExportOutputV(Folderide, cbLOD.Checked).ConfigureAwait(false);
+                        MessageBox.Show("Done", "Complete!", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        EnableControls();
+                        txtIDE.ForeColor = Color.Black;
+                        txtIDE.Text = "Idle";
+                        txtEntities.ForeColor = Color.Black;
+                        txtEntities.Text = "No entity process";
+                        File.WriteAllText("MissingModels.txt", Missing.ToString());
+                    }
+                    catch (Exception)
+                    {
+                        MessageBox.Show("The convertion cannot be done, check the paths and try again", "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                    }
 
                 }
 
-                if (cbOutputGame.SelectedIndex == 1)
-                {
-                    await ExportOutputIV(Folderide).ConfigureAwait(false);
-                }
 
-                if (cbOutputGame.SelectedItem == null)
-                {
-                    MessageBox.Show("Error", "Select a output format", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                }
-
-                MessageBox.Show("Done", "Complete!", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                EnableControls();
-                txtIDE.ForeColor = Color.Black;
-                txtIDE.Text = "Idle";
-                txtEntities.ForeColor = Color.Black;
-                txtEntities.Text = "No entity process";
-               File.WriteAllText("MissingModels.txt", Missing.ToString());
             }
+
+
+            if (cbOutputGame.SelectedIndex == 1)
+            {
+
+            }
+
+            if (cbOutputGame.SelectedItem == null)
+            {
+                MessageBox.Show("Please select a Output game and try again", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+            }
+
+
         }
 
         public async Task ExportOutputV(string idefolda, bool isLOD)
@@ -304,14 +314,8 @@ namespace IDE2YTYP
                     if (File.Exists(ytfFolder))
                     {
                         DialogResult result = MessageBox.Show("The file " + filename + ".ytyp" + " already exists. \nDo you want to overwrite it?", "Alert", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-                        if (result == DialogResult.Yes)
-                        {
 
-                            File.WriteAllBytes(ytfFolder, newData);
-
-                        }
-
-
+                        if (result == DialogResult.Yes) { File.WriteAllBytes(ytfFolder, newData); }
                     }
                     else
                     {
@@ -348,7 +352,7 @@ namespace IDE2YTYP
                 foreach (var ide in idefiles)
                 {
 
-                    StringBuilder ivIDE = new StringBuilder(); 
+                    StringBuilder ivIDE = new StringBuilder();
 
                     string filename = Path.GetFileNameWithoutExtension(ide);
                     string filenamewithex = Path.GetFileName(ide);
@@ -397,10 +401,10 @@ namespace IDE2YTYP
                             LodDist = linesplitted[4].Trim(); //Lod Distance in IDE 
                             txtEntities.ForeColor = Color.Green;
                             txtEntities.Text = "Processing " + ModelName + "...";
-                            ivIDE.AppendLine(ModelName + ", " 
+                            ivIDE.AppendLine(ModelName + ", "
                                 + TextureDic + ", "
-                                + LodDist + ", 12582912, 0, " 
-                                + GetODR(ModelName).AABBMin.X + ", " 
+                                + LodDist + ", 12582912, 0, "
+                                + GetODR(ModelName).AABBMin.X + ", "
                                 + GetODR(ModelName).AABBMin.Y + ", "
                                 + GetODR(ModelName).AABBMin.Z + ", "
                                 + GetODR(ModelName).AABBMax.X + ", "
@@ -409,7 +413,7 @@ namespace IDE2YTYP
                                 + GetODR(ModelName).center.Z + ", "
                                 + GetODR(ModelName).radius + ", "
                                 + "null");
-                          
+
                         }
 
                         if (tobj)
@@ -426,6 +430,8 @@ namespace IDE2YTYP
                                 + GetODR(ModelName).AABBMin.Y + ", "
                                 + GetODR(ModelName).AABBMin.Z + ", "
                                 + GetODR(ModelName).AABBMax.X + ", "
+                                + GetODR(ModelName).AABBMax.Y + ", "
+                                + GetODR(ModelName).AABBMax.Z + ", "
                                 + GetODR(ModelName).center.X + ", "
                                 + GetODR(ModelName).center.Y + ", "
                                 + GetODR(ModelName).center.Z + ", "
@@ -438,34 +444,6 @@ namespace IDE2YTYP
 
                     }
 
-                    //if (isLOD)
-                    //{
-                    //    string LODytfFolder = folderout + "//" + filename + "_lod.ytyp";
-                    //    byte[] newLodData = lodytf.Save();
-
-                    //    if (File.Exists(LODytfFolder))
-                    //    {
-                    //        DialogResult result = MessageBox.Show("The file " + filename + "_lod.ytyp" + " already exists. \nDo you want to overwrite it?", "Alert", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-                    //        if (result == DialogResult.Yes)
-                    //        {
-
-                    //            File.WriteAllBytes(LODytfFolder, newLodData);
-
-                    //        }
-
-
-                    //    }
-                    //    else
-                    //    {
-                    //        File.WriteAllBytes(LODytfFolder, newLodData);
-
-                    //    }
-
-
-
-                    //}
-
-
 
                     string IDEIVFolder = Folderout + "//" + filename + ".ide";
 
@@ -476,6 +454,7 @@ namespace IDE2YTYP
                         {
 
                             //File.WriteAllBytes(IDEIVFolder, newData);
+                            File.WriteAllText(IDEIVFolder, ivIDE.ToString());
 
                         }
 
@@ -484,6 +463,8 @@ namespace IDE2YTYP
                     else
                     {
                         //File.WriteAllBytes(IDEIVFolder, newData);
+                        File.WriteAllText(IDEIVFolder, ivIDE.ToString());
+
 
                     }
 
@@ -505,212 +486,77 @@ namespace IDE2YTYP
 
             try
             {
-                string[] odrfile = File.ReadAllLines(Folderydr + "//" + file + ".odr");
-                foreach (var line in odrfile)
-                {
-                    if (line.Contains("Version 110 12"))
-                    {
-                        continue;
-                    }
+                var odrfile = File.ReadLines(Folderydr + "//" + file + ".odr");
+                var odrheader = odrfile.Skip(3).Take(1).First().ToString();
+                string[] odrsplit = odrheader.Split(' ');
 
-                    if (line.Contains("shadinggroup"))
-                    {
-                        continue;
-                    }
-                    if (line.Contains("{"))
-                    {
-                        continue;
-                    }
 
-                    string[] split1 = line.Split(' ');
+                int shadersnum = int.Parse(odrsplit[1]) + 13;
 
-                    if (line.Contains("	Shaders"))
-                    {
+                var odrcenter = odrfile.Skip(shadersnum).Take(1).First().ToString();
+                var odraabbmin = odrfile.Skip(shadersnum).Take(2).First().ToString();
+                var odraabbmax = odrfile.Skip(shadersnum).Take(3).First().ToString();
+                var odrradius = odrfile.Skip(shadersnum).Take(4).First().ToString();
 
-                    }
+                string[] centersplit = odrcenter.Split(' ');
+                string[] aabbminsplit = odraabbmin.Split(' ');
+                string[] aabbmaxsplit = odraabbmax.Split(' ');
+                string[] radiussplit = odrradius.Split(' ');
 
-                    for (int i = 0; i < Convert.ToInt32(split1[1] + 2); i++)
-                    {
-                        if (line.Contains(" "))
-                        {
-                            continue;
-                        }
-                    }
 
-                    if (line.Contains("{"))
-                    {
-                        continue;
-                    }
+                center = new Vector3(float.Parse(centersplit[1]),
+                    float.Parse(centersplit[2]),
+                    float.Parse(centersplit[3]));
 
-                    if (line.Contains("lodgroup"))
-                    {
-                        continue;
-                    }
+                AABBMax = new Vector3(float.Parse(aabbmaxsplit[1]),
+                    float.Parse(aabbmaxsplit[2]),
+                    float.Parse(aabbmaxsplit[3]));
 
-                    if (line.Contains("}"))
-                    {
-                        continue;
-                    }
+                AABBMin = new Vector3(float.Parse(aabbminsplit[1]),
+                    float.Parse(aabbminsplit[2]),
+                    float.Parse(aabbminsplit[3]));
 
-                    if (line.Contains("	high"))
-                    {
-                        continue;
-                    }
+                radius = float.Parse(radiussplit[1]);
 
-                    if (line.Contains("	med"))
-                    {
-                        continue;
-                    }
 
-                    if (line.Contains("	low"))
-                    {
-                        continue;
-                    }
-
-                    if (line.Contains("	vlow"))
-                    {
-                        continue;
-                    }
-
-                    if (line.Contains("	high"))
-                    {
-                        continue;
-                    }
-
-                    if (line.Contains("center"))
-                    {
-                        string[] centervalues = line.Split(' ');
-                        center = new Vector3(Convert.ToSingle(centervalues[1].Trim()), Convert.ToSingle(centervalues[2].Trim()), Convert.ToSingle(centervalues[3].Trim()));
-                        continue;
-                    }
-
-                    if (line.Contains("AABBMin"))
-                    {
-                        string[] aabbminvalues = line.Split(' ');
-                        AABBMin = new Vector3(Convert.ToSingle(aabbminvalues[1].Trim()), Convert.ToSingle(aabbminvalues[2].Trim()), Convert.ToSingle(aabbminvalues[3].Trim()));
-                        continue;
-                    }
-
-                    if (line.Contains("AABBMax"))
-                    {
-                        string[] aabbmaxvalues = line.Split(' ');
-                        AABBMax = new Vector3(Convert.ToSingle(aabbmaxvalues[1].Trim()), Convert.ToSingle(aabbmaxvalues[2].Trim()), Convert.ToSingle(aabbmaxvalues[3].Trim()));
-                        continue;
-                    }
-
-                    if (line.Contains("radius"))
-                    {
-                        string[] radiusvalue = line.Split(' ');
-                        radius = Convert.ToSingle(radiusvalue[1]);
-
-                    }
-                }
 
             }
             catch (Exception)
             {
 
                 //Missing.AppendLine(" - " + file);
-                string[] odrfile = File.ReadAllLines("default.odr");
-                foreach (var line in odrfile)
-                {
-                    if (line.Contains("Version 110 12"))
-                    {
-                        continue;
-                    }
 
-                    if (line.Contains("shadinggroup"))
-                    {
-                        continue;
-                    }
-                    if (line.Contains("{"))
-                    {
-                        continue;
-                    }
+                var odrfile = File.ReadLines("default.odr");
+                var odrheader = odrfile.Skip(3).Take(1).First().ToString();
+                string[] odrsplit = odrheader.Split(' ');
 
 
-                    if (line.Contains("Shaders"))
-                    {
-                        string[] split1 = line.Split(' ');
-                        int skipshaders = int.Parse(split1[1]);
+                int shadersnum = int.Parse(odrsplit[1]) + 13;
 
-                        for (int i = 1; i < Convert.ToInt32(skipshaders + 2); i++)
-                        {
-                                continue;
-                        }
-                    }
+                var odrcenter = odrfile.Skip(shadersnum).Take(1).First().ToString();
+                var odraabbmin = odrfile.Skip(shadersnum).Take(2).First().ToString();
+                var odraabbmax = odrfile.Skip(shadersnum).Take(3).First().ToString();
+                var odrradius = odrfile.Skip(shadersnum).Take(4).First().ToString();
+
+                string[] centersplit = odrcenter.Split(' ');
+                string[] aabbminsplit = odraabbmin.Split(' ');
+                string[] aabbmaxsplit = odraabbmax.Split(' ');
+                string[] radiussplit = odrradius.Split(' ');
 
 
+                center = new Vector3(float.Parse(centersplit[1]),
+                    float.Parse(centersplit[2]),
+                    float.Parse(centersplit[3]));
 
-                    if (line.Contains("{"))
-                    {
-                        continue;
-                    }
+                AABBMax = new Vector3(float.Parse(aabbmaxsplit[1]),
+                    float.Parse(aabbmaxsplit[2]),
+                    float.Parse(aabbmaxsplit[3]));
 
-                    if (line.Contains("lodgroup"))
-                    {
-                        continue;
-                    }
+                AABBMin = new Vector3(float.Parse(aabbminsplit[1]),
+                    float.Parse(aabbminsplit[2]),
+                    float.Parse(aabbminsplit[3]));
 
-                    if (line.Contains("}"))
-                    {
-                        continue;
-                    }
-
-                    if (line.Contains("	high"))
-                    {
-                        continue;
-                    }
-
-                    if (line.Contains("	med"))
-                    {
-                        continue;
-                    }
-
-                    if (line.Contains("	low"))
-                    {
-                        continue;
-                    }
-
-                    if (line.Contains("	vlow"))
-                    {
-                        continue;
-                    }
-
-                    if (line.Contains("	high"))
-                    {
-                        continue;
-                    }
-
-                    if (line.Contains("center"))
-                    {
-                        string[] centervalues = line.Split(' ');
-                        center = new Vector3(Convert.ToSingle(centervalues[1].Trim()), Convert.ToSingle(centervalues[2].Trim()), Convert.ToSingle(centervalues[3].Trim()));
-                        continue;
-                    }
-
-                    if (line.Contains("AABBMin"))
-                    {
-                        string[] aabbminvalues = line.Split(' ');
-                        AABBMin = new Vector3(Convert.ToSingle(aabbminvalues[1].Trim()), Convert.ToSingle(aabbminvalues[2].Trim()), Convert.ToSingle(aabbminvalues[3].Trim()));
-                        continue;
-                    }
-
-                    if (line.Contains("AABBMax"))
-                    {
-                        string[] aabbmaxvalues = line.Split(' ');
-                        AABBMax = new Vector3(Convert.ToSingle(aabbmaxvalues[1].Trim()), Convert.ToSingle(aabbmaxvalues[2].Trim()), Convert.ToSingle(aabbmaxvalues[3].Trim()));
-                        continue;
-                    }
-
-                    if (line.Contains("radius"))
-                    {
-                        string[] radiusvalue = line.Split(' ');
-                        radius = Convert.ToSingle(radiusvalue[1]);
-
-                    }
-                }
-
+                radius = float.Parse(radiussplit[1]);
 
             }
 
@@ -739,7 +585,7 @@ namespace IDE2YTYP
             catch (Exception)
             {
 
-                    Missing.AppendLine(" - " + file);
+                Missing.AppendLine(" - " + file);
 
 
                 YdrFile yd2 = new YdrFile();
