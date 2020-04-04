@@ -7,7 +7,7 @@
     <ProjectGuid>{7CA2B4B6-9B50-44F6-8CD5-02C5997E4AF7}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <RootNamespace>IDE2YTYP</RootNamespace>
-    <AssemblyName>IDE2YTYP</AssemblyName>
+    <AssemblyName>IDE Processor</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -119,12 +119,6 @@
     <Reference Include="MaterialSkin, Version=2.1.2.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MaterialSkin.2.2.1.2\lib\net461\MaterialSkin.dll</HintPath>
     </Reference>
-    <Reference Include="RageLib.Common">
-      <HintPath>E:\SteamLibrary\steamapps\common\Grand Theft Auto San Andreas\data\maps\country\Nueva carpeta\Nueva carpeta\RageLib.Common.dll</HintPath>
-    </Reference>
-    <Reference Include="RageLib.Models">
-      <HintPath>E:\SteamLibrary\steamapps\common\Grand Theft Auto San Andreas\data\maps\country\Nueva carpeta\Nueva carpeta\RageLib.Models.dll</HintPath>
-    </Reference>
     <Reference Include="SharpDX">
       <HintPath>C:\Users\vicho\Desktop\CodeWalker30_dev30\SharpDX.dll</HintPath>
     </Reference>
@@ -163,6 +157,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">

@@ -33,7 +33,7 @@
             this.ide_textbox = new MaterialSkin.Controls.MaterialTextBox();
             this.browse_ide = new MaterialSkin.Controls.MaterialButton();
             this.ydr_textbox = new MaterialSkin.Controls.MaterialTextBox();
-            this.browse_ydr = new MaterialSkin.Controls.MaterialButton();
+            this.browse_model = new MaterialSkin.Controls.MaterialButton();
             this.cbLOD = new MaterialSkin.Controls.MaterialCheckbox();
             this.out_textbox = new MaterialSkin.Controls.MaterialTextBox();
             this.browse_out = new MaterialSkin.Controls.MaterialButton();
@@ -118,24 +118,24 @@
             this.ydr_textbox.WordWrap = false;
             this.ydr_textbox.TextChanged += new System.EventHandler(this.Ydr_textbox_TextChanged);
             // 
-            // browse_ydr
+            // browse_model
             // 
-            this.browse_ydr.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.browse_ydr.Depth = 0;
-            this.browse_ydr.DrawShadows = true;
-            this.browse_ydr.HighEmphasis = true;
-            this.browse_ydr.Icon = null;
-            this.browse_ydr.Location = new System.Drawing.Point(869, 245);
-            this.browse_ydr.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
-            this.browse_ydr.MouseState = MaterialSkin.MouseState.HOVER;
-            this.browse_ydr.Name = "browse_ydr";
-            this.browse_ydr.Size = new System.Drawing.Size(80, 36);
-            this.browse_ydr.TabIndex = 16;
-            this.browse_ydr.Text = "Browse";
-            this.browse_ydr.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
-            this.browse_ydr.UseAccentColor = false;
-            this.browse_ydr.UseVisualStyleBackColor = true;
-            this.browse_ydr.Click += new System.EventHandler(this.Browse_ydr_Click);
+            this.browse_model.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.browse_model.Depth = 0;
+            this.browse_model.DrawShadows = true;
+            this.browse_model.HighEmphasis = true;
+            this.browse_model.Icon = null;
+            this.browse_model.Location = new System.Drawing.Point(869, 245);
+            this.browse_model.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.browse_model.MouseState = MaterialSkin.MouseState.HOVER;
+            this.browse_model.Name = "browse_model";
+            this.browse_model.Size = new System.Drawing.Size(80, 36);
+            this.browse_model.TabIndex = 16;
+            this.browse_model.Text = "Browse";
+            this.browse_model.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            this.browse_model.UseAccentColor = false;
+            this.browse_model.UseVisualStyleBackColor = true;
+            this.browse_model.Click += new System.EventHandler(this.Browse_model_Click);
             // 
             // cbLOD
             // 
@@ -252,7 +252,7 @@
             this.cbOutputGame.DropDownHeight = 174;
             this.cbOutputGame.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbOutputGame.DropDownWidth = 121;
-            this.cbOutputGame.Font = new System.Drawing.Font("Roboto Medium", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Pixel);
+            this.cbOutputGame.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Pixel);
             this.cbOutputGame.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.cbOutputGame.FormattingEnabled = true;
             this.cbOutputGame.Hint = "Game Output";
@@ -284,7 +284,7 @@
             this.Controls.Add(this.convert_button);
             this.Controls.Add(this.out_textbox);
             this.Controls.Add(this.cbLOD);
-            this.Controls.Add(this.browse_ydr);
+            this.Controls.Add(this.browse_model);
             this.Controls.Add(this.ydr_textbox);
             this.Controls.Add(this.browse_ide);
             this.Controls.Add(this.ide_textbox);
@@ -295,7 +295,7 @@
             this.Name = "IDE2YTYP";
             this.Sizable = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "IDE2YTYP";
+            this.Text = "IDE Processor";
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -306,7 +306,7 @@
         private MaterialSkin.Controls.MaterialTextBox ide_textbox;
         private MaterialSkin.Controls.MaterialButton browse_ide;
         private MaterialSkin.Controls.MaterialTextBox ydr_textbox;
-        private MaterialSkin.Controls.MaterialButton browse_ydr;
+        private MaterialSkin.Controls.MaterialButton browse_model;
         private MaterialSkin.Controls.MaterialCheckbox cbLOD;
         private MaterialSkin.Controls.MaterialTextBox out_textbox;
         private MaterialSkin.Controls.MaterialButton browse_out;

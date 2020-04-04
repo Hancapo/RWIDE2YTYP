@@ -16,7 +16,7 @@ namespace IDE2YTYP
     {
 
         private string folderide;
-        private string folderydr;
+        private string foldermodel;
         private string folderout;
 
         private StringBuilder missing = new StringBuilder();
@@ -36,7 +36,7 @@ namespace IDE2YTYP
         public StringBuilder Missing { get => missing; set => missing = value; }
         public string LodDist { get => lodDist; set => lodDist = value; }
         public string Folderide { get => folderide; set => folderide = value; }
-        public string Folderydr { get => folderydr; set => folderydr = value; }
+        public string Foldermodel { get => foldermodel; set => foldermodel = value; }
         public string Folderout { get => folderout; set => folderout = value; }
 
         public IDE2YTYP()
@@ -62,7 +62,7 @@ namespace IDE2YTYP
             ide_textbox.Text = fbd.SelectedPath;
         }
 
-        private void Browse_ydr_Click(object sender, EventArgs e)
+        private void Browse_model_Click(object sender, EventArgs e)
         {
             FolderBrowserDialog fbd2 = new FolderBrowserDialog
             {
@@ -89,9 +89,9 @@ namespace IDE2YTYP
             if (cbOutputGame.SelectedIndex == 0)
             {
 
-                if (Check(Folderide, Folderydr, Folderout).Item1 && Check(Folderide, Folderydr, Folderout).Item2 && Check(Folderide, Folderydr, Folderout).Item3)
+                if (Check(Folderide, Foldermodel, Folderout).Item1 && Check(Folderide, Foldermodel, Folderout).Item2 && Check(Folderide, Foldermodel, Folderout).Item3)
                 {
-                    if (Directory.Exists(Folderide) && Directory.Exists(Folderydr) && Directory.Exists(Folderout))
+                    if (Directory.Exists(Folderide) && Directory.Exists(Foldermodel) && Directory.Exists(Folderout))
                     {
                         await ExportOutputV(Folderide, cbLOD.Checked).ConfigureAwait(false);
                         MessageBox.Show("Done", "Complete!", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -123,9 +123,9 @@ namespace IDE2YTYP
 
             if (cbOutputGame.SelectedIndex == 1)
             {
-                if (Check(Folderide, Folderydr, Folderout).Item1 && Check(Folderide, Folderydr, Folderout).Item2 && Check(Folderide, Folderydr, Folderout).Item3)
+                if (Check(Folderide, Foldermodel, Folderout).Item1 && Check(Folderide, Foldermodel, Folderout).Item2 && Check(Folderide, Foldermodel, Folderout).Item3)
                 {
-                    if (Directory.Exists(Folderide) && Directory.Exists(Folderydr) && Directory.Exists(Folderout))
+                    if (Directory.Exists(Folderide) && Directory.Exists(Foldermodel) && Directory.Exists(Folderout))
                     {
                         await ExportOutputIV(Folderide).ConfigureAwait(false);
                         MessageBox.Show("Done", "Complete!", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -520,12 +520,12 @@ namespace IDE2YTYP
 
         public string GetODR(string file)
         {
-            string filefolder = Folderydr + "//" + file + ".odr";
+            string filefolder = Foldermodel + "//" + file + ".odr";
 
             string fulldata;
             if (File.Exists(filefolder))
             {
-                FileStream fs = new FileStream(Folderydr + "//" + file + ".odr", FileMode.Open);
+                FileStream fs = new FileStream(Foldermodel + "//" + file + ".odr", FileMode.Open);
                 StringBuilder odr1 = new StringBuilder();
                 StreamReader sr = new StreamReader(fs);
 
@@ -605,12 +605,12 @@ namespace IDE2YTYP
             Vector3 bbcenter;
             float bbsphere;
 
-            string filefolder = Folderydr + "//" + file + ".ydr";
+            string filefolder = Foldermodel + "//" + file + ".ydr";
 
             if (File.Exists(filefolder))
             {
                 YdrFile yd = new YdrFile();
-                byte[] data = File.ReadAllBytes(Folderydr + "//" + file + ".ydr");
+                byte[] data = File.ReadAllBytes(Foldermodel + "//" + file + ".ydr");
                 RpfFile.LoadResourceFile<YdrFile>(yd, data, 165);
 
                 bbmax = yd.Drawable.BoundingBoxMax;
@@ -643,7 +643,7 @@ namespace IDE2YTYP
 
         private void Ydr_textbox_TextChanged(object sender, EventArgs e)
         {
-            Folderydr = this.ydr_textbox.Text;
+            Foldermodel = this.ydr_textbox.Text;
 
         }
 
@@ -706,7 +706,7 @@ namespace IDE2YTYP
             cbLOD.Enabled = true;
             browse_ide.Enabled = true;
             browse_out.Enabled = true;
-            browse_ydr.Enabled = true;
+            browse_model.Enabled = true;
         }
 
         private void DisableControls()
@@ -720,7 +720,7 @@ namespace IDE2YTYP
             cbLOD.Enabled = false;
             browse_ide.Enabled = false;
             browse_out.Enabled = false;
-            browse_ydr.Enabled = false;
+            browse_model.Enabled = false;
         }
 
         private void CbOutputGame_SelectedIndexChanged(object sender, EventArgs e)
