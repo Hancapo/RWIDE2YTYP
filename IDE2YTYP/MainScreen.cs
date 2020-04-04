@@ -8,7 +8,7 @@ using Color = System.Drawing.Color;
 using MaterialSkin;
 using MaterialSkin.Controls;
 using System.Text;
-using System.Linq;
+using System.Diagnostics;
 
 namespace IDE2YTYP
 {
@@ -53,41 +53,47 @@ namespace IDE2YTYP
         }
 
 
-        private void browse_ide_Click(object sender, EventArgs e)
+        private void Browse_ide_Click(object sender, EventArgs e)
         {
-            FolderBrowserDialog fbd = new FolderBrowserDialog();
-            fbd.Description = "Select a folder that contains your IDEs files.";
+            FolderBrowserDialog fbd = new FolderBrowserDialog
+            {
+                Description = "Select a folder that contains your IDEs files."
+            };
             fbd.ShowDialog();
             ide_textbox.Text = fbd.SelectedPath;
         }
 
-        private void browse_ydr_Click(object sender, EventArgs e)
+        private void Browse_ydr_Click(object sender, EventArgs e)
         {
-            FolderBrowserDialog fbd2 = new FolderBrowserDialog();
-            fbd2.Description = "Select a folder that contains your YDRs files.";
+            FolderBrowserDialog fbd2 = new FolderBrowserDialog
+            {
+                Description = "Select a folder that contains your YDRs files."
+            };
             fbd2.ShowDialog();
             ydr_textbox.Text = fbd2.SelectedPath;
         }
 
-        private void browse_out_Click(object sender, EventArgs e)
+        private void Browse_out_Click(object sender, EventArgs e)
         {
 
-            FolderBrowserDialog fbd3 = new FolderBrowserDialog();
-            fbd3.Description = "Select a folder you want to output the files.";
+            FolderBrowserDialog fbd3 = new FolderBrowserDialog
+            {
+                Description = "Select a folder you want to output the files."
+            };
             fbd3.ShowDialog();
             out_textbox.Text = fbd3.SelectedPath;
         }
 
 
-        private async void convert_button_Click(object sender, EventArgs e)
+        private async void Convert_button_Click(object sender, EventArgs e)
         {
 
             if (cbOutputGame.SelectedIndex == 0)
             {
 
-                if (Check(Folderide, Folderydr, Folderout).Item1 && Check(Folderide, Folderydr, Folderout).Item2 && Check(Folderide, Folderydr, Folderout).Item3 && cbOutputGame.SelectedItem == null)
+                if (Check(Folderide, Folderydr, Folderout).Item1 && Check(Folderide, Folderydr, Folderout).Item2 && Check(Folderide, Folderydr, Folderout).Item3)
                 {
-                    try
+                    if (Directory.Exists(Folderide) && Directory.Exists(Folderydr) && Directory.Exists(Folderout))
                     {
                         await ExportOutputV(Folderide, cbLOD.Checked).ConfigureAwait(false);
                         MessageBox.Show("Done", "Complete!", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -96,13 +102,20 @@ namespace IDE2YTYP
                         txtIDE.Text = "Idle";
                         txtEntities.ForeColor = Color.Black;
                         txtEntities.Text = "No entity process";
-                        File.WriteAllText("MissingModels.txt", Missing.ToString());
-                    }
-                    catch (Exception)
-                    {
-                        MessageBox.Show("The convertion cannot be done, check the paths and try again", "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
+
+                        //File.WriteAllText("MissingModels.txt", Missing.ToString());
                     }
+                    else
+                    {
+                        MessageBox.Show("One or more of the selected paths aren't valid.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+
+
+                }
+                else
+                {
+                    MessageBox.Show("The convertion cannot be done, check the paths and try again", "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 }
 
@@ -112,7 +125,30 @@ namespace IDE2YTYP
 
             if (cbOutputGame.SelectedIndex == 1)
             {
+                if (Check(Folderide, Folderydr, Folderout).Item1 && Check(Folderide, Folderydr, Folderout).Item2 && Check(Folderide, Folderydr, Folderout).Item3)
+                {
+                    if (Directory.Exists(Folderide) && Directory.Exists(Folderydr) && Directory.Exists(Folderout))
+                    {
+                        await ExportOutputIV(Folderide).ConfigureAwait(false);
+                        MessageBox.Show("Done", "Complete!", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        EnableControls();
+                        txtIDE.ForeColor = Color.Black;
+                        txtIDE.Text = "Idle";
+                        txtEntities.ForeColor = Color.Black;
+                        txtEntities.Text = "No entity process";
+                    }
+                    else
+                    {
+                        MessageBox.Show("The convertion cannot be done, check the paths and try again", "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
+                    }
+
+                }
+                else
+                {
+                    MessageBox.Show("The convertion cannot be done, check the paths and try again", "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                }
             }
 
             if (cbOutputGame.SelectedItem == null)
@@ -334,7 +370,6 @@ namespace IDE2YTYP
 
         public async Task ExportOutputIV(string idefolda)
         {
-
             DisableControls();
 
             bool tobj = false;
@@ -349,73 +384,66 @@ namespace IDE2YTYP
 
             Task tk = Task.Run(() =>
             {
-                foreach (var ide in idefiles)
+            foreach (var ide in idefiles)
+            {
+
+                StringBuilder ivIDE = new StringBuilder();
+                ivIDE.AppendLine("objs");
+
+                string filename = Path.GetFileNameWithoutExtension(ide);
+                string filenamewithex = Path.GetFileName(ide);
+
+                Missing.AppendLine(filenamewithex);
+
+
+                idecount += 1;
+                txtIDE.ForeColor = Color.Red;
+                txtIDE.Text = idecount + " of " + idefiles.Length;
+
+                string[] idelines = File.ReadAllLines(ide);
+
+                foreach (var line in idelines)
                 {
+                    string fixline = line.ToLowerInvariant();
 
-                    StringBuilder ivIDE = new StringBuilder();
+                    string[] linesplitted = fixline.Split(',');
 
-                    string filename = Path.GetFileNameWithoutExtension(ide);
-                    string filenamewithex = Path.GetFileName(ide);
-
-                    Missing.AppendLine(filenamewithex);
-
-
-                    idecount += 1;
-                    txtIDE.ForeColor = Color.Red;
-                    txtIDE.Text = idecount + " of " + idefiles.Length;
-
-                    string[] idelines = File.ReadAllLines(ide);
-
-                    foreach (var line in idelines)
+                    if (!issom)
                     {
-                        string fixline = line.ToLowerInvariant();
-
-                        string[] linesplitted = fixline.Split(',');
-
-                        if (!issom)
+                        if (string.IsNullOrEmpty(fixline))
                         {
-                            if (string.IsNullOrEmpty(fixline))
-                            {
-                                continue;
-                            }
-                            if (fixline.StartsWith("#"))
-                            {
-                                continue; //ignore comments
-                            }
-                            if (fixline.StartsWith("objs")) { obj = true; continue; };
-                            if (fixline.StartsWith("tobj")) { tobj = true; continue; };
-                        }
-
-                        if (fixline.StartsWith("end"))
-                        {
-                            tobj = false;
-                            obj = false;
                             continue;
                         }
-
-                        if (obj)
+                        if (fixline.StartsWith("#"))
                         {
+                            continue; //ignore comments
+                        }
+                        if (fixline.StartsWith("objs")) { obj = true; continue; };
+                        if (fixline.StartsWith("tobj")) { tobj = true; continue; };
+                    }
 
-                            ModelName = linesplitted[1].Trim(); //ModelName in IDE
-                            TextureDic = linesplitted[2].Trim(); //TextureDictionary in IDE 
-                            LodDist = linesplitted[4].Trim(); //Lod Distance in IDE 
-                            txtEntities.ForeColor = Color.Green;
-                            txtEntities.Text = "Processing " + ModelName + "...";
-                            ivIDE.AppendLine(ModelName + ", "
-                                + TextureDic + ", "
-                                + LodDist + ", 12582912, 0, "
-                                + GetODR(ModelName).AABBMin.X + ", "
-                                + GetODR(ModelName).AABBMin.Y + ", "
-                                + GetODR(ModelName).AABBMin.Z + ", "
-                                + GetODR(ModelName).AABBMax.X + ", "
-                                + GetODR(ModelName).center.X + ", "
-                                + GetODR(ModelName).center.Y + ", "
-                                + GetODR(ModelName).center.Z + ", "
-                                + GetODR(ModelName).radius + ", "
-                                + "null");
+                    if (fixline.StartsWith("end"))
+                    {
+                        tobj = false;
+                        obj = false;
+                        continue;
+                    }
+
+                    if (obj)
+                    {
+                        ModelName = linesplitted[1].Trim(); //ModelName in IDE
+                        TextureDic = linesplitted[2].Trim(); //TextureDictionary in IDE 
+                        LodDist = linesplitted[4].Trim(); //Lod Distance in IDE 
+                        txtEntities.ForeColor = Color.Green;
+                        txtEntities.Text = "Processing " + ModelName + "...";
+
+                        ivIDE.AppendLine(ModelName + ", "
+                            + TextureDic + ", "
+                            + LodDist + ", 12582912, 0, "
+                            + GetODR(ModelName) + ", null").ToString();
+;
 
                         }
-
                         if (tobj)
                         {
 
@@ -423,27 +451,17 @@ namespace IDE2YTYP
                             TextureDict = linesplitted[2].Trim(); //TextureDictionary in IDE 
                             LodDist = linesplitted[4].Trim(); //Lod Distance in IDE 
                             txtEntities.Text = "Processing " + ModelNamet + "...";
-                            ivIDE.AppendLine(ModelName + ", "
-                                + TextureDic + ", "
+                            ivIDE.AppendLine(ModelNamet + ", "
+                                + TextureDict + ", "
                                 + LodDist + ", 12582912, 0, "
-                                + GetODR(ModelName).AABBMin.X + ", "
-                                + GetODR(ModelName).AABBMin.Y + ", "
-                                + GetODR(ModelName).AABBMin.Z + ", "
-                                + GetODR(ModelName).AABBMax.X + ", "
-                                + GetODR(ModelName).AABBMax.Y + ", "
-                                + GetODR(ModelName).AABBMax.Z + ", "
-                                + GetODR(ModelName).center.X + ", "
-                                + GetODR(ModelName).center.Y + ", "
-                                + GetODR(ModelName).center.Z + ", "
-                                + GetODR(ModelName).radius + ", "
-                                + "null" + ","
-                                + "33423487");
+                                + GetODR(ModelName) + ", null").ToString();
 
                         }
 
 
                     }
 
+                    ivIDE.AppendLine("end");
 
                     string IDEIVFolder = Folderout + "//" + filename + ".ide";
 
@@ -475,93 +493,91 @@ namespace IDE2YTYP
             await tk.ConfigureAwait(false);
 
 
+
+
+
         }
 
-        public (Vector3 center, Vector3 AABBMin, Vector3 AABBMax, float radius) GetODR(string file)
+        public string GetODR(string file)
         {
-            Vector3 AABBMax = Vector3.Zero;
-            Vector3 AABBMin = Vector3.Zero;
-            Vector3 center = Vector3.Zero;
-            float radius = 0f;
+            string fulldata = string.Empty;
 
-            try
+            string filefolder = Folderydr + "//" + file + ".odr";
+
+            if (File.Exists(filefolder))
             {
-                var odrfile = File.ReadLines(Folderydr + "//" + file + ".odr");
-                var odrheader = odrfile.Skip(3).Take(1).First().ToString();
-                string[] odrsplit = odrheader.Split(' ');
+                FileStream fs = new FileStream(Folderydr + "//" + file + ".odr", FileMode.Open);
+                StringBuilder odr1 = new StringBuilder();
+                StreamReader sr = new StreamReader(fs);
 
+                //Reading ODR Header
+                for (int i = 0; i < 3; i++)
+                {
+                    sr.ReadLine();
+                }
 
-                int shadersnum = int.Parse(odrsplit[1]) + 13;
+                //Reading material count
+                int shadernum = Convert.ToInt32(sr.ReadLine().Split(' ')[1].Trim());
 
-                var odrcenter = odrfile.Skip(shadersnum).Take(1).First().ToString();
-                var odraabbmin = odrfile.Skip(shadersnum).Take(2).First().ToString();
-                var odraabbmax = odrfile.Skip(shadersnum).Take(3).First().ToString();
-                var odrradius = odrfile.Skip(shadersnum).Take(4).First().ToString();
+                for (int z = 0; z < shadernum + 9; z++)
+                {
+                    sr.ReadLine();
+                }
 
-                string[] centersplit = odrcenter.Split(' ');
-                string[] aabbminsplit = odraabbmin.Split(' ');
-                string[] aabbmaxsplit = odraabbmax.Split(' ');
-                string[] radiussplit = odrradius.Split(' ');
+                string[] centerpart = sr.ReadLine().Split(' ');
+                string[] aabbmapart = sr.ReadLine().Split(' ');
+                string[] aabbmipart = sr.ReadLine().Split(' ');
+                string radio = sr.ReadLine().Split(' ')[1];
 
+                odr1.AppendLine(aabbmipart[1] + " ," + aabbmipart[2] + " ," + aabbmipart[3] + " ,"
+                    + aabbmapart[1] + " ," + aabbmapart[2] + " ," + aabbmapart[3] + " ,"
+                    + centerpart[1] + " ," + centerpart[2] + " ," + centerpart[3] + " ,"
+                    + radio);
 
-                center = new Vector3(float.Parse(centersplit[1]),
-                    float.Parse(centersplit[2]),
-                    float.Parse(centersplit[3]));
+                fs.Close();
 
-                AABBMax = new Vector3(float.Parse(aabbmaxsplit[1]),
-                    float.Parse(aabbmaxsplit[2]),
-                    float.Parse(aabbmaxsplit[3]));
-
-                AABBMin = new Vector3(float.Parse(aabbminsplit[1]),
-                    float.Parse(aabbminsplit[2]),
-                    float.Parse(aabbminsplit[3]));
-
-                radius = float.Parse(radiussplit[1]);
-
-
-
+                fulldata = odr1.ToString();
             }
-            catch (Exception)
+            else
             {
-
                 //Missing.AppendLine(" - " + file);
 
-                var odrfile = File.ReadLines("default.odr");
-                var odrheader = odrfile.Skip(3).Take(1).First().ToString();
-                string[] odrsplit = odrheader.Split(' ');
+                FileStream fs = new FileStream("default.odr", FileMode.Open);
+                StringBuilder odr2 = new StringBuilder();
 
+                StreamReader sr = new StreamReader(fs);
 
-                int shadersnum = int.Parse(odrsplit[1]) + 13;
+                //Reading ODR Header
+                for (int i = 0; i < 3; i++)
+                {
+                    sr.ReadLine();
+                }
 
-                var odrcenter = odrfile.Skip(shadersnum).Take(1).First().ToString();
-                var odraabbmin = odrfile.Skip(shadersnum).Take(2).First().ToString();
-                var odraabbmax = odrfile.Skip(shadersnum).Take(3).First().ToString();
-                var odrradius = odrfile.Skip(shadersnum).Take(4).First().ToString();
+                //Reading material count
+                int shadernum = Convert.ToInt32(sr.ReadLine().Split(' ')[1].Trim());
 
-                string[] centersplit = odrcenter.Split(' ');
-                string[] aabbminsplit = odraabbmin.Split(' ');
-                string[] aabbmaxsplit = odraabbmax.Split(' ');
-                string[] radiussplit = odrradius.Split(' ');
+                for (int z = 0; z < shadernum + 9; z++)
+                {
+                    sr.ReadLine();
+                }
 
+                string[] centerpart = sr.ReadLine().Split(' ');
+                string[] aabbmapart = sr.ReadLine().Split(' ');
+                string[] aabbmipart = sr.ReadLine().Split(' ');
+                string radio = sr.ReadLine().Split(' ')[1];
 
-                center = new Vector3(float.Parse(centersplit[1]),
-                    float.Parse(centersplit[2]),
-                    float.Parse(centersplit[3]));
+                odr2.AppendLine(aabbmipart[1] + " ," + aabbmipart[2] + " ," + aabbmipart[3] + " ,"
+                    + aabbmapart[1] + " ," + aabbmapart[2] + " ," + aabbmapart[3] + " ,"
+                    + centerpart[1] + " ," + centerpart[2] + " ," + centerpart[3] + " ,"
+                    + radio);
 
-                AABBMax = new Vector3(float.Parse(aabbmaxsplit[1]),
-                    float.Parse(aabbmaxsplit[2]),
-                    float.Parse(aabbmaxsplit[3]));
+                fulldata = odr2.ToString();
 
-                AABBMin = new Vector3(float.Parse(aabbminsplit[1]),
-                    float.Parse(aabbminsplit[2]),
-                    float.Parse(aabbminsplit[3]));
-
-                radius = float.Parse(radiussplit[1]);
-
+                fs.Close();
             }
-
-            return (center, AABBMin, AABBMax, radius);
+            return fulldata;
         }
+
 
         public (Vector3 bbmax, Vector3 bbmin, Vector3 bbcenter, float bbsphere) GetYDR(string file)
         {
@@ -570,7 +586,9 @@ namespace IDE2YTYP
             Vector3 bbcenter;
             float bbsphere;
 
-            try
+            string filefolder = Folderydr + "//" + file + ".ydr";
+
+            if (File.Exists(filefolder))
             {
                 YdrFile yd = new YdrFile();
                 byte[] data = File.ReadAllBytes(Folderydr + "//" + file + ".ydr");
@@ -580,11 +598,9 @@ namespace IDE2YTYP
                 bbmin = yd.Drawable.BoundingBoxMin;
                 bbcenter = yd.Drawable.BoundingCenter;
                 bbsphere = yd.Drawable.BoundingSphereRadius;
-
             }
-            catch (Exception)
+            else
             {
-
                 Missing.AppendLine(" - " + file);
 
 
@@ -604,18 +620,18 @@ namespace IDE2YTYP
 
 
 
-        private void ide_textbox_TextChanged(object sender, EventArgs e)
+        private void Ide_textbox_TextChanged(object sender, EventArgs e)
         {
             Folderide = this.ide_textbox.Text;
         }
 
-        private void ydr_textbox_TextChanged(object sender, EventArgs e)
+        private void Ydr_textbox_TextChanged(object sender, EventArgs e)
         {
             Folderydr = this.ydr_textbox.Text;
 
         }
 
-        private void out_textbox_TextChanged(object sender, EventArgs e)
+        private void Out_textbox_TextChanged(object sender, EventArgs e)
         {
             Folderout = this.out_textbox.Text;
 
@@ -691,7 +707,7 @@ namespace IDE2YTYP
             browse_ydr.Enabled = false;
         }
 
-        private void cbOutputGame_SelectedIndexChanged(object sender, EventArgs e)
+        private void CbOutputGame_SelectedIndexChanged(object sender, EventArgs e)
         {
 
             if (cbOutputGame.SelectedIndex == 0)
@@ -705,5 +721,6 @@ namespace IDE2YTYP
 
             }
         }
+
     }
 }

@@ -63,7 +63,7 @@
             this.convert_button.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
             this.convert_button.UseAccentColor = false;
             this.convert_button.UseVisualStyleBackColor = true;
-            this.convert_button.Click += new System.EventHandler(this.convert_button_Click);
+            this.convert_button.Click += new System.EventHandler(this.Convert_button_Click);
             // 
             // ide_textbox
             // 
@@ -80,7 +80,7 @@
             this.ide_textbox.TabIndex = 13;
             this.ide_textbox.Text = "";
             this.ide_textbox.WordWrap = false;
-            this.ide_textbox.TextChanged += new System.EventHandler(this.ide_textbox_TextChanged);
+            this.ide_textbox.TextChanged += new System.EventHandler(this.Ide_textbox_TextChanged);
             // 
             // browse_ide
             // 
@@ -99,7 +99,7 @@
             this.browse_ide.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
             this.browse_ide.UseAccentColor = false;
             this.browse_ide.UseVisualStyleBackColor = true;
-            this.browse_ide.Click += new System.EventHandler(this.browse_ide_Click);
+            this.browse_ide.Click += new System.EventHandler(this.Browse_ide_Click);
             // 
             // ydr_textbox
             // 
@@ -116,7 +116,7 @@
             this.ydr_textbox.TabIndex = 15;
             this.ydr_textbox.Text = "";
             this.ydr_textbox.WordWrap = false;
-            this.ydr_textbox.TextChanged += new System.EventHandler(this.ydr_textbox_TextChanged);
+            this.ydr_textbox.TextChanged += new System.EventHandler(this.Ydr_textbox_TextChanged);
             // 
             // browse_ydr
             // 
@@ -135,7 +135,7 @@
             this.browse_ydr.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
             this.browse_ydr.UseAccentColor = false;
             this.browse_ydr.UseVisualStyleBackColor = true;
-            this.browse_ydr.Click += new System.EventHandler(this.browse_ydr_Click);
+            this.browse_ydr.Click += new System.EventHandler(this.Browse_ydr_Click);
             // 
             // cbLOD
             // 
@@ -167,7 +167,7 @@
             this.out_textbox.TabIndex = 18;
             this.out_textbox.Text = "";
             this.out_textbox.WordWrap = false;
-            this.out_textbox.TextChanged += new System.EventHandler(this.out_textbox_TextChanged);
+            this.out_textbox.TextChanged += new System.EventHandler(this.Out_textbox_TextChanged);
             // 
             // browse_out
             // 
@@ -186,7 +186,7 @@
             this.browse_out.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
             this.browse_out.UseAccentColor = false;
             this.browse_out.UseVisualStyleBackColor = true;
-            this.browse_out.Click += new System.EventHandler(this.browse_out_Click);
+            this.browse_out.Click += new System.EventHandler(this.Browse_out_Click);
             // 
             // txtIDE
             // 
@@ -267,7 +267,7 @@
             this.cbOutputGame.Name = "cbOutputGame";
             this.cbOutputGame.Size = new System.Drawing.Size(152, 49);
             this.cbOutputGame.TabIndex = 25;
-            this.cbOutputGame.SelectedIndexChanged += new System.EventHandler(this.cbOutputGame_SelectedIndexChanged);
+            this.cbOutputGame.SelectedIndexChanged += new System.EventHandler(this.CbOutputGame_SelectedIndexChanged);
             // 
             // IDE2YTYP
             // 
