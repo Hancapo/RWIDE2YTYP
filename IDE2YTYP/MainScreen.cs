@@ -729,11 +729,16 @@ namespace IDE2YTYP
             if (cbOutputGame.SelectedIndex == 0)
             {
                 cbLOD.Visible = true;
+                hdtexturedist_textbox.Visible = true;
+                lodist_textbox.Visible = true;
             }
 
             if (cbOutputGame.SelectedIndex == 1)
             {
                 cbLOD.Visible = false;
+                hdtexturedist_textbox.Visible = false;
+                lodist_textbox.Visible = false;
+
 
             }
         }
