@@ -52,7 +52,6 @@ namespace IDE2YTYP
 
         }
 
-
         private void Browse_ide_Click(object sender, EventArgs e)
         {
             FolderBrowserDialog fbd = new FolderBrowserDialog
@@ -83,7 +82,6 @@ namespace IDE2YTYP
             fbd3.ShowDialog();
             out_textbox.Text = fbd3.SelectedPath;
         }
-
 
         private async void Convert_button_Click(object sender, EventArgs e)
         {
@@ -384,80 +382,102 @@ namespace IDE2YTYP
 
             Task tk = Task.Run(() =>
             {
-            foreach (var ide in idefiles)
-            {
-
-                StringBuilder ivIDE = new StringBuilder();
-                ivIDE.AppendLine("objs");
-
-                string filename = Path.GetFileNameWithoutExtension(ide);
-                string filenamewithex = Path.GetFileName(ide);
-
-                Missing.AppendLine(filenamewithex);
-
-
-                idecount += 1;
-                txtIDE.ForeColor = Color.Red;
-                txtIDE.Text = idecount + " of " + idefiles.Length;
-
-                string[] idelines = File.ReadAllLines(ide);
-
-                foreach (var line in idelines)
+                foreach (var ide in idefiles)
                 {
-                    string fixline = line.ToLowerInvariant();
 
-                    string[] linesplitted = fixline.Split(',');
+                    StringBuilder ivIDE = new StringBuilder();
+                    ivIDE.AppendLine("objs");
 
-                    if (!issom)
+                    string filename = Path.GetFileNameWithoutExtension(ide);
+                    string filenamewithex = Path.GetFileName(ide);
+
+                    Missing.AppendLine(filenamewithex);
+
+
+                    idecount += 1;
+                    txtIDE.ForeColor = Color.Red;
+                    txtIDE.Text = idecount + " of " + idefiles.Length;
+
+                    string[] idelines = File.ReadAllLines(ide);
+
+                    foreach (var line in idelines)
                     {
-                        if (string.IsNullOrEmpty(fixline))
+                        string fixline = line.ToLowerInvariant();
+
+                        string[] linesplitted = fixline.Split(',');
+
+                        if (!issom)
                         {
+                            if (string.IsNullOrEmpty(fixline))
+                            {
+                                continue;
+                            }
+                            if (fixline.StartsWith("#"))
+                            {
+                                continue; //ignore comments
+                            }
+                            if (fixline.StartsWith("objs")) { obj = true; continue; };
+                            if (fixline.StartsWith("tobj")) { tobj = true; continue; };
+                        }
+
+                        if (fixline.StartsWith("end"))
+                        {
+                            tobj = false;
+                            obj = false;
                             continue;
                         }
-                        if (fixline.StartsWith("#"))
+
+                        if (obj)
                         {
-                            continue; //ignore comments
-                        }
-                        if (fixline.StartsWith("objs")) { obj = true; continue; };
-                        if (fixline.StartsWith("tobj")) { tobj = true; continue; };
-                    }
 
-                    if (fixline.StartsWith("end"))
-                    {
-                        tobj = false;
-                        obj = false;
-                        continue;
-                    }
+                            ModelName = linesplitted[1].Trim(); //ModelName in IDE
+                            TextureDic = linesplitted[2].Trim(); //TextureDictionary in IDE 
 
-                    if (obj)
-                    {
-                        ModelName = linesplitted[1].Trim(); //ModelName in IDE
-                        TextureDic = linesplitted[2].Trim(); //TextureDictionary in IDE 
-                        LodDist = linesplitted[4].Trim(); //Lod Distance in IDE 
-                        txtEntities.ForeColor = Color.Green;
-                        txtEntities.Text = "Processing " + ModelName + "...";
+                            if (linesplitted.Length < 6)
+                            {
+                                LodDist = linesplitted[3].Trim(); //Lod Distance in SA IDE
 
-                        ivIDE.AppendLine(ModelName + ", "
-                            + TextureDic + ", "
-                            + LodDist + ", 12582912, 0, "
-                            + GetODR(ModelName) + ", null").ToString();
-;
+                            }
+                            else
+                            {
+                                LodDist = linesplitted[4].Trim(); //Lod Distance in 3/LCS/VCS/VC IDE
+
+                            }
+
+                            txtEntities.ForeColor = Color.Green;
+                            txtEntities.Text = "Processing " + ModelName + "...";
+
+                            ivIDE.AppendLine(ModelName + ", "
+                                + TextureDic + ", "
+                                + LodDist + ", 12582912, 0, "
+                                + GetODR(ModelName).ToString().Replace("\n", "").Replace("\r", "") + ", null");
 
                         }
+
                         if (tobj)
                         {
 
                             ModelNamet = linesplitted[1].Trim(); //ModelName in IDE
                             TextureDict = linesplitted[2].Trim(); //TextureDictionary in IDE 
-                            LodDist = linesplitted[4].Trim(); //Lod Distance in IDE 
+
+                            if (linesplitted.Length < 6)
+                            {
+                                LodDist = linesplitted[3].Trim(); //Lod Distance in SA IDE
+
+                            }
+                            else
+                            {
+                                LodDist = linesplitted[4].Trim(); //Lod Distance in 3/LCS/VCS/VC IDE
+
+                            }
+
                             txtEntities.Text = "Processing " + ModelNamet + "...";
                             ivIDE.AppendLine(ModelNamet + ", "
                                 + TextureDict + ", "
                                 + LodDist + ", 12582912, 0, "
-                                + GetODR(ModelName) + ", null").ToString();
+                                + GetODR(ModelName).ToString().Replace("\n", "").Replace("\r", "") + ", null");
 
                         }
-
 
                     }
 
@@ -500,10 +520,9 @@ namespace IDE2YTYP
 
         public string GetODR(string file)
         {
-            string fulldata = string.Empty;
-
             string filefolder = Folderydr + "//" + file + ".odr";
 
+            string fulldata;
             if (File.Exists(filefolder))
             {
                 FileStream fs = new FileStream(Folderydr + "//" + file + ".odr", FileMode.Open);
@@ -515,6 +534,7 @@ namespace IDE2YTYP
                 {
                     sr.ReadLine();
                 }
+
 
                 //Reading material count
                 int shadernum = Convert.ToInt32(sr.ReadLine().Split(' ')[1].Trim());
@@ -578,7 +598,6 @@ namespace IDE2YTYP
             return fulldata;
         }
 
-
         public (Vector3 bbmax, Vector3 bbmin, Vector3 bbcenter, float bbsphere) GetYDR(string file)
         {
             Vector3 bbmax;
@@ -616,9 +635,6 @@ namespace IDE2YTYP
 
             return (bbmax, bbmin, bbcenter, bbsphere);
         }
-
-
-
 
         private void Ide_textbox_TextChanged(object sender, EventArgs e)
         {

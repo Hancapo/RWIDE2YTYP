@@ -116,6 +116,12 @@
     <Reference Include="MaterialSkin, Version=2.1.2.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MaterialSkin.2.2.1.2\lib\net461\MaterialSkin.dll</HintPath>
     </Reference>
+    <Reference Include="RageLib.Common">
+      <HintPath>E:\SteamLibrary\steamapps\common\Grand Theft Auto San Andreas\data\maps\country\Nueva carpeta\Nueva carpeta\RageLib.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="RageLib.Models">
+      <HintPath>E:\SteamLibrary\steamapps\common\Grand Theft Auto San Andreas\data\maps\country\Nueva carpeta\Nueva carpeta\RageLib.Models.dll</HintPath>
+    </Reference>
     <Reference Include="SharpDX">
       <HintPath>C:\Users\vicho\Desktop\CodeWalker30_dev30\SharpDX.dll</HintPath>
     </Reference>
