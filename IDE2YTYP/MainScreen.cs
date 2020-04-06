@@ -393,6 +393,7 @@ namespace IDE2YTYP
                     StringBuilder ivIDE = new StringBuilder();
                     StringBuilder ivIDEtobj = new StringBuilder();
                     ivIDE.AppendLine("objs");
+                    ivIDEtobj.AppendLine("tobj");
 
                     string filename = Path.GetFileNameWithoutExtension(ide);
                     string filenamewithex = Path.GetFileName(ide);
@@ -489,6 +490,7 @@ namespace IDE2YTYP
                     }
 
                     ivIDE.AppendLine("end");
+                    ivIDEtobj.AppendLine("end");
 
                     string IDEIVFolder = Folderout + "//" + filename + ".ide";
 

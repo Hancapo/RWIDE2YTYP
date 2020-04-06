@@ -118,7 +118,8 @@
       <HintPath>.\CodeWalker.Core.dll</HintPath>
     </Reference>
     <Reference Include="MaterialSkin, Version=2.1.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MaterialSkin.2.2.1.2\lib\net461\MaterialSkin.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>.\MaterialSkin.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
