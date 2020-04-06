@@ -101,7 +101,7 @@ namespace IDE2YTYP
                         txtEntities.ForeColor = Color.Black;
                         txtEntities.Text = "No entity process";
                         File.WriteAllText(Folderout + "\\" + "MissingModels.txt", Missing.ToString());
-                        MessageBox.Show("Please check MissingModels.txt to see if any models are missing in your output", "Atention", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show("Please check MissingModels.txt to see if any models are missing in your output folder", "Atention", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         Missing.Clear();
                     }
                     else
@@ -135,7 +135,7 @@ namespace IDE2YTYP
                         txtEntities.ForeColor = Color.Black;
                         txtEntities.Text = "No entity process";
                         File.WriteAllText(Folderout + "\\" + "MissingModels.txt", Missing.ToString());
-                        MessageBox.Show("Please check MissingModels.txt to see if any models are missing in your output", "Atention", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show("Please check MissingModels.txt to see if any models are missing in your output folder", "Atention", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         Missing.Clear();
                     }
                     else
