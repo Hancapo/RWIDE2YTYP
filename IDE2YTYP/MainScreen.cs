@@ -33,22 +33,22 @@ namespace IDE2YTYP
         public string TextureDic { get => textureDic; set => textureDic = value; }
         public string ModelNamet { get => modelNamet; set => modelNamet = value; }
         public string TextureDict { get => textureDict; set => textureDict = value; }
-        public StringBuilder Missing { get => missing; set => missing = value; }
         public string LodDist { get => lodDist; set => lodDist = value; }
         public string Folderide { get => folderide; set => folderide = value; }
         public string Foldermodel { get => foldermodel; set => foldermodel = value; }
         public string Folderout { get => folderout; set => folderout = value; }
+        public StringBuilder Missing { get => missing; set => missing = value; }
 
         public IDE2YTYP()
         {
             InitializeComponent();
             CheckForIllegalCrossThreadCalls = false;
-            Missing.Clear();
+            
 
             var materialSkinManager = MaterialSkinManager.Instance;
             materialSkinManager.AddFormToManage(this);
             materialSkinManager.Theme = MaterialSkinManager.Themes.LIGHT;
-            materialSkinManager.ColorScheme = new ColorScheme(Primary.BlueGrey800, Primary.BlueGrey900, Primary.BlueGrey500, Accent.LightBlue200, TextShade.WHITE);
+            materialSkinManager.ColorScheme = new ColorScheme(Primary.Red800, Primary.Red900, Primary.Red500, Accent.Red200, TextShade.WHITE);
 
         }
 
@@ -100,9 +100,9 @@ namespace IDE2YTYP
                         txtIDE.Text = "Idle";
                         txtEntities.ForeColor = Color.Black;
                         txtEntities.Text = "No entity process";
-
-
-                        //File.WriteAllText("MissingModels.txt", Missing.ToString());
+                        File.WriteAllText(Foldermodel + "\\" + "MissingModels.txt", Missing.ToString());
+                        MessageBox.Show("Please check MissingModels.txt to see if any models are missing in your output", "Atention", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        Missing.Clear();
                     }
                     else
                     {
@@ -113,7 +113,7 @@ namespace IDE2YTYP
                 }
                 else
                 {
-                    MessageBox.Show("The convertion cannot be done, check the paths and try again", "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("The conversion cannot be done, check the paths and try again", "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 }
 
@@ -134,10 +134,13 @@ namespace IDE2YTYP
                         txtIDE.Text = "Idle";
                         txtEntities.ForeColor = Color.Black;
                         txtEntities.Text = "No entity process";
+                        File.WriteAllText("MissingModels.txt", Missing.ToString());
+                        MessageBox.Show("Please check MissingModels.txt to see if any models are missing in your output", "Atention", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        Missing.Clear();
                     }
                     else
                     {
-                        MessageBox.Show("The convertion cannot be done, check the paths and try again", "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show("The conversion cannot be done, check the paths and try again", "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                     }
 
@@ -184,7 +187,7 @@ namespace IDE2YTYP
                     string filename = Path.GetFileNameWithoutExtension(ide);
                     string filenamewithex = Path.GetFileName(ide);
 
-                    Missing.AppendLine(filenamewithex);
+                    Missing.AppendLine(" - " + filenamewithex + " - ");
 
 
                     idecount += 1;
@@ -212,7 +215,7 @@ namespace IDE2YTYP
                             if (fixline.StartsWith("objs")) { obj = true; continue; };
                             if (fixline.StartsWith("tobj")) { tobj = true; continue; };
                         }
-
+                            
                         if (fixline.StartsWith("end"))
                         {
                             tobj = false;
@@ -226,6 +229,7 @@ namespace IDE2YTYP
                             ModelName = linesplitted[1].Trim(); //ModelName in IDE
                             TextureDic = linesplitted[2].Trim(); //TextureDictionary in IDE 
                             txtEntities.ForeColor = Color.Green;
+                            CheckModel(ModelName, ".ydr");
                             txtEntities.Text = "Processing " + ModelName + "...";
 
 
@@ -290,7 +294,8 @@ namespace IDE2YTYP
                         {
 
                             ModelNamet = linesplitted[1].Trim(); //ModelName in IDE
-                            TextureDict = linesplitted[2].Trim(); //TextureDictionary in IDE 
+                            TextureDict = linesplitted[2].Trim(); //TextureDictionary in IDE
+                            CheckModel(ModelNamet, ".ydr");
                             txtEntities.Text = "Processing " + ModelNamet + "...";
                             TimeArchetype tarc = new TimeArchetype();
 
@@ -386,12 +391,13 @@ namespace IDE2YTYP
                 {
 
                     StringBuilder ivIDE = new StringBuilder();
+                    StringBuilder ivIDEtobj = new StringBuilder();
                     ivIDE.AppendLine("objs");
 
                     string filename = Path.GetFileNameWithoutExtension(ide);
                     string filenamewithex = Path.GetFileName(ide);
 
-                    Missing.AppendLine(filenamewithex);
+                    Missing.AppendLine(" - " + filenamewithex + " - ");
 
 
                     idecount += 1;
@@ -432,7 +438,7 @@ namespace IDE2YTYP
 
                             ModelName = linesplitted[1].Trim(); //ModelName in IDE
                             TextureDic = linesplitted[2].Trim(); //TextureDictionary in IDE 
-
+                            CheckModel(ModelName, ".odr");
                             if (linesplitted.Length < 6)
                             {
                                 LodDist = linesplitted[3].Trim(); //Lod Distance in SA IDE
@@ -459,6 +465,7 @@ namespace IDE2YTYP
 
                             ModelNamet = linesplitted[1].Trim(); //ModelName in IDE
                             TextureDict = linesplitted[2].Trim(); //TextureDictionary in IDE 
+                            CheckModel(ModelNamet, ".odr");
 
                             if (linesplitted.Length < 6)
                             {
@@ -472,10 +479,10 @@ namespace IDE2YTYP
                             }
 
                             txtEntities.Text = "Processing " + ModelNamet + "...";
-                            ivIDE.AppendLine(ModelNamet + ", "
+                            ivIDEtobj.AppendLine(ModelNamet + ", "
                                 + TextureDict + ", "
                                 + LodDist + ", 12582912, 0, "
-                                + GetODR(ModelName).ToString().Replace("\n", "").Replace("\r", "") + ", null");
+                                + GetODR(ModelName).ToString().Replace("\n", "").Replace("\r", "") + ", null, 33423487");
 
                         }
 
@@ -492,7 +499,7 @@ namespace IDE2YTYP
                         {
 
                             //File.WriteAllBytes(IDEIVFolder, newData);
-                            File.WriteAllText(IDEIVFolder, ivIDE.ToString());
+                            File.WriteAllText(IDEIVFolder, ivIDE.ToString() + ivIDEtobj.ToString());
 
                         }
 
@@ -501,7 +508,7 @@ namespace IDE2YTYP
                     else
                     {
                         //File.WriteAllBytes(IDEIVFolder, newData);
-                        File.WriteAllText(IDEIVFolder, ivIDE.ToString());
+                        File.WriteAllText(IDEIVFolder, ivIDE.ToString() + ivIDEtobj.ToString());
 
 
                     }
@@ -707,6 +714,7 @@ namespace IDE2YTYP
             browse_ide.Enabled = true;
             browse_out.Enabled = true;
             browse_model.Enabled = true;
+            cbOutputGame.Enabled = true;
         }
 
         private void DisableControls()
@@ -721,6 +729,8 @@ namespace IDE2YTYP
             browse_ide.Enabled = false;
             browse_out.Enabled = false;
             browse_model.Enabled = false;
+            cbOutputGame.Enabled = false;
+
         }
 
         private void CbOutputGame_SelectedIndexChanged(object sender, EventArgs e)
@@ -742,6 +752,18 @@ namespace IDE2YTYP
 
             }
         }
+
+        private void CheckModel(string filename, string format)
+        {
+            string filefolder = Foldermodel + "//" + filename + format;
+
+            if (!File.Exists(filefolder))
+            {
+                Missing.AppendLine(" -" + filename);
+            }
+            
+        }
+
 
     }
 }
