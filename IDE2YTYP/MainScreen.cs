@@ -100,7 +100,7 @@ namespace IDE2YTYP
                         txtIDE.Text = "Idle";
                         txtEntities.ForeColor = Color.Black;
                         txtEntities.Text = "No entity process";
-                        File.WriteAllText(Foldermodel + "\\" + "MissingModels.txt", Missing.ToString());
+                        File.WriteAllText(Folderout + "\\" + "MissingModels.txt", Missing.ToString());
                         MessageBox.Show("Please check MissingModels.txt to see if any models are missing in your output", "Atention", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         Missing.Clear();
                     }
@@ -134,7 +134,7 @@ namespace IDE2YTYP
                         txtIDE.Text = "Idle";
                         txtEntities.ForeColor = Color.Black;
                         txtEntities.Text = "No entity process";
-                        File.WriteAllText("MissingModels.txt", Missing.ToString());
+                        File.WriteAllText(Folderout + "\\" + "MissingModels.txt", Missing.ToString());
                         MessageBox.Show("Please check MissingModels.txt to see if any models are missing in your output", "Atention", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         Missing.Clear();
                     }
@@ -499,20 +499,13 @@ namespace IDE2YTYP
                         DialogResult result = MessageBox.Show("The file " + filename + ".ide" + " already exists. \nDo you want to overwrite it?", "Alert", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
                         if (result == DialogResult.Yes)
                         {
-
-                            //File.WriteAllBytes(IDEIVFolder, newData);
                             File.WriteAllText(IDEIVFolder, ivIDE.ToString() + ivIDEtobj.ToString());
 
                         }
-
-
                     }
                     else
                     {
-                        //File.WriteAllBytes(IDEIVFolder, newData);
                         File.WriteAllText(IDEIVFolder, ivIDE.ToString() + ivIDEtobj.ToString());
-
-
                     }
 
 
