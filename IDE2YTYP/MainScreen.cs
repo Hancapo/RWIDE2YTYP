@@ -41,6 +41,8 @@ namespace IDE2YTYP
 
         public IDE2YTYP()
         {
+            CheckODRandYDR();
+
             InitializeComponent();
             CheckForIllegalCrossThreadCalls = false;
             
@@ -64,10 +66,19 @@ namespace IDE2YTYP
 
         private void Browse_model_Click(object sender, EventArgs e)
         {
-            FolderBrowserDialog fbd2 = new FolderBrowserDialog
+            FolderBrowserDialog fbd2 = new FolderBrowserDialog();
+
+            if (cbOutputGame.SelectedIndex == 0)
             {
-                Description = "Select a folder that contains your YDRs files."
-            };
+                fbd2.Description = "Select a folder that contains your YDR files.";
+
+            }
+            if (cbOutputGame.SelectedIndex == 1)
+            {
+                fbd2.Description = "Select a folder that contains your ODR files.";
+
+            }
+
             fbd2.ShowDialog();
             ydr_textbox.Text = fbd2.SelectedPath;
         }
@@ -94,14 +105,14 @@ namespace IDE2YTYP
                     if (Directory.Exists(Folderide) && Directory.Exists(Foldermodel) && Directory.Exists(Folderout))
                     {
                         await ExportOutputV(Folderide, cbLOD.Checked).ConfigureAwait(false);
-                        MessageBox.Show("Done", "Complete!", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show("Done", "Attention", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         EnableControls();
                         txtIDE.ForeColor = Color.Black;
                         txtIDE.Text = "Idle";
                         txtEntities.ForeColor = Color.Black;
                         txtEntities.Text = "No entity process";
                         File.WriteAllText(Folderout + "\\" + "MissingModels.txt", Missing.ToString());
-                        MessageBox.Show("Please check MissingModels.txt to see if any models are missing in your output folder", "Atention", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show("Please, check MissingModels.txt to see if any models are missing in your output folder.", "Attention", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         Missing.Clear();
                     }
                     else
@@ -113,7 +124,7 @@ namespace IDE2YTYP
                 }
                 else
                 {
-                    MessageBox.Show("The conversion cannot be done, check the paths and try again", "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("The conversion cannot be done, check the paths and try again.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 }
 
@@ -127,27 +138,27 @@ namespace IDE2YTYP
                 {
                     if (Directory.Exists(Folderide) && Directory.Exists(Foldermodel) && Directory.Exists(Folderout))
                     {
-                        await ExportOutputIV(Folderide).ConfigureAwait(false);
-                        MessageBox.Show("Done", "Complete!", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        EnableControls();
-                        txtIDE.ForeColor = Color.Black;
-                        txtIDE.Text = "Idle";
-                        txtEntities.ForeColor = Color.Black;
-                        txtEntities.Text = "No entity process";
-                        File.WriteAllText(Folderout + "\\" + "MissingModels.txt", Missing.ToString());
-                        MessageBox.Show("Please check MissingModels.txt to see if any models are missing in your output folder", "Atention", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        Missing.Clear();
+                            await ExportOutputIV(Folderide).ConfigureAwait(false);
+                            MessageBox.Show("Done", "Attention", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            EnableControls();
+                            txtIDE.ForeColor = Color.Black;
+                            txtIDE.Text = "Idle";
+                            txtEntities.ForeColor = Color.Black;
+                            txtEntities.Text = "No entity process";
+                            File.WriteAllText(Folderout + "\\" + "MissingModels.txt", Missing.ToString());
+                            MessageBox.Show("Please, check MissingModels.txt to see if any models are missing in your output folder", "Attention", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            Missing.Clear();
                     }
                     else
                     {
-                        MessageBox.Show("The conversion cannot be done, check the paths and try again", "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show("The conversion cannot be done, check the paths and try again.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                     }
 
                 }
                 else
                 {
-                    MessageBox.Show("The convertion cannot be done, check the paths and try again", "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("The convertion cannot be done, check the paths and try again.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 }
             }
@@ -525,9 +536,10 @@ namespace IDE2YTYP
             string filefolder = Foldermodel + "//" + file + ".odr";
 
             string fulldata;
+
             if (File.Exists(filefolder))
             {
-                FileStream fs = new FileStream(Foldermodel + "//" + file + ".odr", FileMode.Open);
+                FileStream fs = new FileStream(filefolder, FileMode.Open);
                 StringBuilder odr1 = new StringBuilder();
                 StreamReader sr = new StreamReader(fs);
 
@@ -536,7 +548,6 @@ namespace IDE2YTYP
                 {
                     sr.ReadLine();
                 }
-
 
                 //Reading material count
                 int shadernum = Convert.ToInt32(sr.ReadLine().Split(' ')[1].Trim());
@@ -559,10 +570,10 @@ namespace IDE2YTYP
                 fs.Close();
 
                 fulldata = odr1.ToString();
+
             }
             else
             {
-                //Missing.AppendLine(" - " + file);
 
                 FileStream fs = new FileStream("default.odr", FileMode.Open);
                 StringBuilder odr2 = new StringBuilder();
@@ -597,6 +608,7 @@ namespace IDE2YTYP
 
                 fs.Close();
             }
+
             return fulldata;
         }
 
@@ -622,7 +634,6 @@ namespace IDE2YTYP
             }
             else
             {
-                Missing.AppendLine(" - " + file);
 
 
                 YdrFile yd2 = new YdrFile();
@@ -655,7 +666,7 @@ namespace IDE2YTYP
 
         }
 
-        private static (bool, bool, bool) Check(string idepath, string ydrpath, string outpath)
+        private static (bool, bool, bool) Check(string idepath, string modelpath, string outpath)
         {
             bool Thereiside;
             bool Thereisydr;
@@ -672,9 +683,9 @@ namespace IDE2YTYP
 
             }
 
-            if (string.IsNullOrEmpty(ydrpath))
+            if (string.IsNullOrEmpty(modelpath))
             {
-                MessageBox.Show("YDR Path cannot be empty, please select a path and try again.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Models Path cannot be empty, please select a path and try again.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 Thereisydr = false;
             }
             else
@@ -754,11 +765,28 @@ namespace IDE2YTYP
 
             if (!File.Exists(filefolder))
             {
-                Missing.AppendLine(" -" + filename);
+                Missing.AppendLine(filename);
             }
             
         }
 
+        private void CheckODRandYDR()
+        {
 
+
+            if (!File.Exists("default.ydr"))
+            {
+                MessageBox.Show("default.ydr is missing, GTA V YTYP conversion won't work, extract all files again and try again.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+            }
+
+            if (!File.Exists("default.odr"))
+            {
+                MessageBox.Show("default.odr is missing, GTA IV IDE conversion won't work, extract all files again and try again.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+
+
+        }
     }
 }
